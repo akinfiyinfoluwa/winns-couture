@@ -84,7 +84,7 @@ const TopNavbar = () => {
               "text-2xl lg:text-[32px] mb-2 mr-3 lg:mr-10 text-yellow-600",
             ])}
           >
-            WINN"S COUTURE
+           WINN'S COUTURE
           </Link>
         </div>
         <NavigationMenu className="hidden md:flex mr-2 lg:mr-7">

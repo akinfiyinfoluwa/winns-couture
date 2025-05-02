@@ -37,7 +37,7 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
           <SheetTitle asChild>
             <SheetClose asChild>
               <Link href="/" className={cn([integralCF.className, "text-2xl"])}>
-                WINN"S COUTURE
+               WINN'S COUTURE
               </Link>
             </SheetClose>
           </SheetTitle>
