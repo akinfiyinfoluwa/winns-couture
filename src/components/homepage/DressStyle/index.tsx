@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { integralCF } from "@/styles/fonts";
+import { satoshi } from "@/styles/fonts";
 import React from "react";
 import * as motion from "framer-motion/client";
 import DressStyleCard from "./DressStyleCard";
@@ -14,11 +14,11 @@ const DressStyle = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className={cn([
-            integralCF.className,
+            satoshi.className,
             "text-[32px] leading-[36px] md:text-5xl mb-8 md:mb-14 capitalize",
           ])}
         >
-          BROWSE BY dress STYLE
+          Browse By Dress Style
         </motion.h2>
         <motion.div
           initial={{ y: "100px", opacity: 0 }}

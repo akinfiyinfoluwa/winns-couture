@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { integralCF } from "@/styles/fonts";
+import { satoshi } from "@/styles/fonts";
 import React from "react";
 import { PaymentBadge, SocialNetworks } from "./footer.types";
 import { FaFacebookF, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
@@ -70,7 +70,7 @@ const Footer = () => {
             <div className="flex flex-col lg:col-span-3 lg:max-w-[248px]">
               <h1
                 className={cn([
-                  integralCF.className,
+                  satoshi.className,
                   "text-[28px] lg:text-[32px] mb-6",
                 ])}
               >

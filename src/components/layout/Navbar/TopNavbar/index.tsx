@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { integralCF } from "@/styles/fonts";
+import { satoshi } from "@/styles/fonts";
 import Link from "next/link";
 import React from "react";
 import { NavMenu } from "../navbar.types";
@@ -80,7 +80,7 @@ const TopNavbar = () => {
           <Link
             href="/"
             className={cn([
-              integralCF.className,
+              satoshi.className,
               "text-2xl lg:text-[32px] mb-2 mr-3 lg:mr-10 text-yellow-600",
             ])}
           >

@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        integralCF: ["var(--font-integralCF)"],
+        satoshi: ["var(--font-satoshi)"],
         satoshi: ["var(--font-satoshi)"],
       },
       screens: {
