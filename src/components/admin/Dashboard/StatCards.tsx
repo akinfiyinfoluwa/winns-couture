@@ -43,11 +43,11 @@ const Card = ({
   period: string;
 }) => {
   return (
-    <div className="col-span-4 p-4 rounded border border-stone-300">
+    <div className="col-span-12 sm:col-span-6 lg:col-span-4 p-4 rounded border border-stone-300">
       <div className="flex mb-8 items-start justify-between">
         <div>
           <h3 className="text-stone-500 mb-2 text-sm">{title}</h3>
-          <p className="text-3xl font-semibold">{value}</p>
+          <p className="text-2xl sm:text-3xl font-semibold">{value}</p>
         </div>
 
         <span
