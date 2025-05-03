@@ -6,6 +6,10 @@ import { makeStore } from "../lib/store";
 import { PersistGate } from "redux-persist/integration/react";
 import SpinnerbLoader from "@/components/ui/SpinnerbLoader";
 
+export const metadata = {
+  title: "Winn's Couture",
+  description: "Created by Logosus",
+};
 type Props = {
   children: React.ReactNode;
 };

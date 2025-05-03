@@ -25,7 +25,7 @@ const NewsLetterSection = () => {
                 src="/icons/envelope.svg"
                 height={20}
                 width={20}
-                alt="email"
+                alt="email" 
                 className="min-w-5 min-h-5"
               />
             </InputGroup.Text>

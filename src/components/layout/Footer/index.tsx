@@ -116,7 +116,7 @@ const Footer = () => {
                 href="https://www.figma.com/@hamzauix"
                 className="text-black font-medium"
               >
-                Hamza Naeem
+                Logosus
               </Link>
             </p>
             <div className="flex items-center">
