@@ -11,7 +11,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         satoshi: ["var(--font-satoshi)"],
-        satoshi: ["var(--font-satoshi)"],
+        
       },
       screens: {
         xs: "375px",
