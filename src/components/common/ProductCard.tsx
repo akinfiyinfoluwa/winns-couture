@@ -1,9 +1,9 @@
 import React from "react";
-import Rating from "../ui/Rating";
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types/product.types";
 import { Button } from "../ui/button";
+import Rating from "../ui/Rating";
 
 type ProductCardProps = {
   data: Product;
@@ -26,25 +26,15 @@ const ProductCard = ({ data }: ProductCardProps) => {
         />
       </div>
       <strong className="text-black xl:text-xl">{data.title}</strong>
-      <div className="flex items-end mb-1 xl:mb-2">
-        {data.timeline === "new" && (
-          <span className="bg-green-400 text-white text-xs xl:text-sm py-1 px-2 rounded-full mr-2">
-            {data.timeline}
-          </span>
-        )}
-        <Rating
-          initialValue={data.rating}
+      {data.timeline === "new"?
+        <span className="bg-green-400 text-white text-xs xl:text-sm py-1 px-2 rounded-full mr-2">
+          {data.timeline}
+        </span>: <Rating  initialValue={data.rating}
           allowFraction
           SVGclassName="inline-block"
-          emptyClassName="fill-gray-50"
-          size={19}
-          readonly
-        />
-        <span className="text-black text-xs xl:text-sm ml-[11px] xl:ml-[13px] pb-0.5 xl:pb-0">
-          {data.rating.toFixed(1)}
-          <span className="text-black/60">/5</span>
-        </span>
-      </div>
+          size={23}
+          readonly />
+      }
       <div className="flex items-center space-x-[5px] xl:space-x-2.5">
         {data.discount.percentage > 0 ? (
           <span className="font-bold text-black text-xl xl:text-2xl">

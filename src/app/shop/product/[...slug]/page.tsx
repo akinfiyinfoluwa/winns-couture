@@ -37,7 +37,7 @@ export default function ProductPage({
         <section className="mb-11">
           <Header data={productData} />
         </section>
-        <Tabs />
+        <Tabs product={productData} />
       </div>
       <div className="mb-[50px] sm:mb-20">
         <ProductListSec title="You might also like" data={relatedProductData} />
