@@ -18,39 +18,15 @@ const data: NavMenu = [
   {
     id: 1,
     label: "Shop",
-    type: "MenuList",
-    children: [
-      {
-        id: 11,
-        label: "Men's clothes",
-        url: "/shop#men-clothes",
-        description: "In attractive and spectacular colors and designs",
-      },
-      {
-        id: 12,
-        label: "Women's clothes",
-        url: "/shop#women-clothes",
-        description: "Ladies, your style and tastes are important to us",
-      },
-      {
-        id: 13,
-        label: "Kids clothes",
-        url: "/shop#kids-clothes",
-        description: "For all ages, with happy and beautiful colors",
-      },
-      {
-        id: 14,
-        label: "Bags and Shoes",
-        url: "/shop#bag-shoes",
-        description: "Suitable for men, women and all tastes and styles",
-      },
-    ],
+    type: "MenuItem",
+    children: [],
+    url: "/shop#deals",
   },
   {
     id: 2,
     type: "MenuItem",
-    label: "On Sale",
-    url: "/shop#on-sale",
+    label: "Deals",
+    url: "/shop#deals",
     children: [],
   },
   {
@@ -62,10 +38,28 @@ const data: NavMenu = [
   },
   {
     id: 4,
-    type: "MenuItem",
     label: "Brands",
-    url: "/shop#brands",
-    children: [],
+    type: "MenuList",
+    children: [
+      {
+        id: 41,
+        label: "My style Express",
+        url: "/shop#my-style-express",
+        description: "Explore My style Express collection",
+      },
+      {
+        id: 42,
+        label: "The Winifred Akin RTW",
+        url: "/shop#winifred-akin-rtw",
+        description: "Discover The Winifred Akin RTW designs",
+      },
+      {
+        id: 43,
+        label: "New arrivals",
+        url: "/shop#new-arrivals-brands",
+        description: "Latest brand arrivals",
+      },
+    ],
   },
 ];
 
