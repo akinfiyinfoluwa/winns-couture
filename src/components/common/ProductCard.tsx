@@ -3,6 +3,7 @@ import Rating from "../ui/Rating";
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types/product.types";
+import { Button } from "../ui/button";
 
 type ProductCardProps = {
   data: Product;
@@ -77,6 +78,9 @@ const ProductCard = ({ data }: ProductCardProps) => {
           )
         )}
       </div>
+      <Button className="mt-4 w-full">
+        Add to Cart
+      </Button>
     </Link>
   );
 };
