@@ -16,6 +16,7 @@ export const newArrivalsData: Product[] = [
 			percentage: 0,
 		},
 		rating: 4.5,
+		timeline: "new",
 	},
 	{
 		id: 2,
@@ -28,6 +29,7 @@ export const newArrivalsData: Product[] = [
 			percentage: 20,
 		},
 		rating: 3.5,
+		timeline: "old",
 	},
 	{
 		id: 3,
@@ -40,6 +42,7 @@ export const newArrivalsData: Product[] = [
 			percentage: 0,
 		},
 		rating: 4.5,
+		timeline: "new",
 	},
 	{
 		id: 4,
@@ -52,6 +55,7 @@ export const newArrivalsData: Product[] = [
 			percentage: 30,
 		},
 		rating: 4.5,
+		timeline: "old",
 	},
 ];
 
@@ -67,6 +71,7 @@ export const topSellingData: Product[] = [
 			percentage: 20,
 		},
 		rating: 5.0,
+		timeline: "new",
 	},
 	{
 		id: 6,
@@ -79,6 +84,7 @@ export const topSellingData: Product[] = [
 			percentage: 0,
 		},
 		rating: 4.0,
+		timeline: "old",
 	},
 	{
 		id: 7,
@@ -91,6 +97,7 @@ export const topSellingData: Product[] = [
 			percentage: 0,
 		},
 		rating: 3.0,
+		timeline: "new",
 	},
 	{
 		id: 8,
@@ -103,6 +110,7 @@ export const topSellingData: Product[] = [
 			percentage: 0,
 		},
 		rating: 4.5,
+		timeline: "old",
 	},
 ];
 
@@ -118,6 +126,7 @@ export const relatedProductData: Product[] = [
 			percentage: 20,
 		},
 		rating: 4.0,
+		timeline: "new",
 	},
 	{
 		id: 13,
@@ -130,10 +139,11 @@ export const relatedProductData: Product[] = [
 			percentage: 0,
 		},
 		rating: 3.5,
+		timeline: "old",
 	},
 	{
 		id: 14,
-		title: "Polo with Tipping Details",
+		title: "Tropical Shirt",
 		srcUrl: "/images/pic14.png",
 		gallery: ["/images/pic14.png"],
 		price: 180,
@@ -141,19 +151,21 @@ export const relatedProductData: Product[] = [
 			amount: 0,
 			percentage: 0,
 		},
-		rating: 4.5,
+		rating: 4.0,
+		timeline: "new",
 	},
 	{
 		id: 15,
-		title: "Black Striped T-shirt",
+		title: "Print Branded T-shirt",
 		srcUrl: "/images/pic15.png",
-		gallery: ["/images/pic15.png"],
-		price: 150,
+		gallery: ["/images/pic15.png", "/images/pic10.png", "/images/pic11.png"],
+		price: 160,
 		discount: {
 			amount: 0,
 			percentage: 30,
 		},
-		rating: 5.0,
+		rating: 4.5,
+		timeline: "old",
 	},
 ];
 
@@ -208,7 +220,7 @@ export default function Home() {
 		<>
 			<main className="my-[50px] sm:my-[72px]">
 				<ProductListSec
-					title="NEW ARRIVALS"
+					title=""
 					data={newArrivalsData}
 					viewAllLink="/shop#new-arrivals"
 				/>

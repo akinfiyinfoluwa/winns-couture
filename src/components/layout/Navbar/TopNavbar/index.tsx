@@ -22,12 +22,31 @@ const data: NavMenu = [
     children: [],
     url: "/shop#deals",
   },
+
+  //Deals” and use this section to showcase bundled offers (e.g., 5 complementary items at a discounted rate).
+
   {
     id: 2,
-    type: "MenuItem",
+    type: "MenuList",
     label: "Deals",
     url: "/shop#deals",
-    children: [],
+    children: [{
+      id: 21,
+      label: "5 for 4",
+      url: "/shop#5-for-4",
+      description: "Get 5 items for the price of 4",
+    },
+    {
+      id: 22,
+      label: "Buy 2 Get 1 Free",
+      url: "/shop#buy-2-get-1-free",
+      description: "Buy any 2 items and get the 3rd one free",
+    },
+    {id: 23,
+      label: "Seasonal Discounts",
+      url: "/shop#seasonal-discounts",
+      description: "Check out our seasonal discounts on selected items",
+    }],
   },
   {
     id: 3,

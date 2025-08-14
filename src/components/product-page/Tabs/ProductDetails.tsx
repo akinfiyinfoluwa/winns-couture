@@ -1,9 +1,15 @@
 import React from "react";
+import { Product } from "@/types/product.types";
+import { div } from "framer-motion/client";
 
 export type SpecItem = {
   label: string;
   value: string;
 };
+
+interface ProductDetailsProps {
+  product: Product;
+}
 
 const specsData: SpecItem[] = [
   {
@@ -24,7 +30,7 @@ const specsData: SpecItem[] = [
   },
 ];
 
-const ProductDetails = () => {
+const ProductDetails = ({ product }: ProductDetailsProps) => {
   return (
     <>
       {specsData.map((item, i) => (

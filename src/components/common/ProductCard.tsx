@@ -13,7 +13,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
   return (
     <Link
       href={`/shop/product/${data.id}/${data.title.split(" ").join("-")}`}
-      className="flex flex-col items-start aspect-auto"
+      className="flex flex-col items-start aspect-auto border border-black/10 hover:border-yellow-600 transition-all duration-300 p-4 rounded-xl"
     >
       <div className="bg-[#F0EEED] rounded-[13px] lg:rounded-[20px] w-full lg:max-w-[295px] aspect-square mb-2.5 xl:mb-4 overflow-hidden">
         <Image
@@ -27,6 +27,11 @@ const ProductCard = ({ data }: ProductCardProps) => {
       </div>
       <strong className="text-black xl:text-xl">{data.title}</strong>
       <div className="flex items-end mb-1 xl:mb-2">
+        {data.timeline === "new" && (
+          <span className="bg-green-400 text-white text-xs xl:text-sm py-1 px-2 rounded-full mr-2">
+            {data.timeline}
+          </span>
+        )}
         <Rating
           initialValue={data.rating}
           allowFraction
@@ -78,8 +83,13 @@ const ProductCard = ({ data }: ProductCardProps) => {
           )
         )}
       </div>
-      <Button className="mt-4 w-full">
-        Add to Cart
+      <Button className="mt-4 w-fit h-fit p-2.5 rounded-full bg-black/5 hover:bg-black/10 transition-all duration-300 ml-auto" size="icon">
+        <Image
+          src="/icons/cart.svg"
+          width={24}
+          height={24}
+          alt="Add to cart"
+        />
       </Button>
     </Link>
   );
