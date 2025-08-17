@@ -12,7 +12,11 @@ import {
 import { FiSliders } from "react-icons/fi";
 import Filters from ".";
 
-const MobileFilters = () => {
+interface MobileFiltersProps {
+  onChange: (callback: (prev: any) => any) => void;
+}
+
+const MobileFilters: React.FC<MobileFiltersProps> = ({ onChange }) => {
   return (
     <>
       <Drawer>
@@ -34,7 +38,7 @@ const MobileFilters = () => {
             <DrawerDescription className="hidden">filters</DrawerDescription>
           </DrawerHeader>
           <div className="max-h-[90%] overflow-y-auto w-full px-5 md:px-6 py-5 space-y-5 md:space-y-6">
-            <Filters />
+            <Filters onChange={onChange} />
           </div>
         </DrawerContent>
       </Drawer>

@@ -12,7 +12,7 @@ type ProductCardProps = {
 const ProductCard = ({ data }: ProductCardProps) => {
   return (
     <Link
-      href={`/shop/product/${data.id}/${data.title.split(" ").join("-")}`}
+      href={`/${data.id}/${data.title.split(" ").join("-")}`}
       className="flex flex-col items-start aspect-auto border border-black/10 hover:border-yellow-600 transition-all duration-300 p-4 rounded-xl"
     >
       <div className="bg-[#F0EEED] rounded-[13px] lg:rounded-[20px] w-full lg:max-w-[295px] aspect-square mb-2.5 xl:mb-4 overflow-hidden">
@@ -51,11 +51,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             ${data.price}
           </span>
         )}
-        {data.discount.percentage > 0 && (
-          <span className="font-bold text-black/40 line-through text-xl xl:text-2xl">
-            ${data.price}
-          </span>
-        )}
+       
         {data.discount.amount > 0 && (
           <span className="font-bold text-black/40 line-through text-xl xl:text-2xl">
             ${data.price}

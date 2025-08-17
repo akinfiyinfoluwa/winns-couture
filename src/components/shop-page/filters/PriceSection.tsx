@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -7,7 +8,23 @@ import {
 } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
 
-const PriceSection = () => {
+interface PriceSectionProps {
+  onChange: (callback: (prev: any) => any) => void;
+}
+
+const PriceSection: React.FC<PriceSectionProps> = ({ onChange }) => {
+  const [priceRange, setPriceRange] = useState<[number, number]>([50, 200]);
+
+  const memoizedOnChange = useCallback(onChange, []);
+
+  useEffect(() => {
+    memoizedOnChange((prev) => ({ ...prev, priceRange }));
+  }, [priceRange, memoizedOnChange]);
+
+  const handleValueChange = (value: number[]) => {
+    setPriceRange(value as [number, number]);
+  };
+
   return (
     <Accordion type="single" collapsible defaultValue="filter-price">
       <AccordionItem value="filter-price" className="border-none">
@@ -16,7 +33,8 @@ const PriceSection = () => {
         </AccordionTrigger>
         <AccordionContent className="pt-4" contentClassName="overflow-visible">
           <Slider
-            defaultValue={[50, 200]}
+            value={priceRange}
+            onValueChange={handleValueChange}
             min={0}
             max={250}
             step={1}

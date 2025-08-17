@@ -1,27 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import CategoriesSection from "@/components/shop-page/filters/CategoriesSection";
 import ColorsSection from "@/components/shop-page/filters/ColorsSection";
-import DressStyleSection from "@/components/shop-page/filters/DressStyleSection";
 import PriceSection from "@/components/shop-page/filters/PriceSection";
 import SizeSection from "@/components/shop-page/filters/SizeSection";
 import { Button } from "@/components/ui/button";
 
-const Filters = () => {
+interface FiltersProps {
+  onChange: (callback: (prev: any) => any) => void;
+}
+
+const Filters: React.FC<FiltersProps> = ({ onChange }) => {
+  const [filters, setFilters] = useState({});
+
+  const handleFilterChange = (updater: (prev: any) => any) => {
+    setFilters(updater);
+  };
+
+  const handleApplyFilters = () => {
+    onChange((prev) => ({ ...prev, ...filters }));
+  };
+
   return (
     <>
       <hr className="border-t-black/10" />
-      <CategoriesSection />
+      <CategoriesSection onChange={handleFilterChange} />
       <hr className="border-t-black/10" />
-      <PriceSection />
+      <PriceSection onChange={handleFilterChange} />
       <hr className="border-t-black/10" />
-      <ColorsSection />
+      <ColorsSection onChange={handleFilterChange} />
       <hr className="border-t-black/10" />
-      <SizeSection />
-      <hr className="border-t-black/10" />
-      <DressStyleSection />
+      <SizeSection onChange={handleFilterChange} />
       <Button
         type="button"
         className="bg-black w-full rounded-full text-sm font-medium py-4 h-12"
+        onClick={handleApplyFilters}
       >
         Apply Filter
       </Button>

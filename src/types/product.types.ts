@@ -12,4 +12,8 @@ export type Product = {
   discount: Discount;
   rating: number;
   timeline?: string; // new or old
+  category: string;
+  sizes: string[];
+  colors: string[];
+  dressStyle: string;
 };

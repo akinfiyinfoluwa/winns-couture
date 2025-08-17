@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -9,8 +9,37 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 
-const SizeSection = () => {
-  const [selected, setSelected] = useState<string>("Large");
+interface SizeSectionProps {
+  onChange: (callback: (prev: any) => any) => void;
+}
+
+const sizes = [
+  "XX-Small",
+  "X-Small",
+  "Small",
+  "Medium",
+  "Large",
+  "X-Large",
+  "XX-Large",
+  "3X-Large",
+  "4X-Large",
+];
+
+const SizeSection: React.FC<SizeSectionProps> = ({ onChange }) => {
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+
+  const handleCheckboxChange = (size: string) => {
+    const newCheckedItems = checkedItems.includes(size)
+      ? checkedItems.filter((item) => item !== size)
+      : [...checkedItems, size];
+    setCheckedItems(newCheckedItems);
+  };
+
+  const memoizedOnChange = useCallback(onChange, []);
+
+  useEffect(() => {
+    memoizedOnChange((prev) => ({ ...prev, sizes: checkedItems }));
+  }, [checkedItems, memoizedOnChange]);
 
   return (
     <Accordion type="single" collapsible defaultValue="filter-size">
@@ -19,26 +48,18 @@ const SizeSection = () => {
           Size
         </AccordionTrigger>
         <AccordionContent className="pt-4 pb-0">
-          <div className="flex items-center flex-wrap">
-            {[
-              "XX-Small",
-              "X-Small",
-              "Small",
-              "Medium",
-              "Large",
-              "X-Large",
-              "XX-Large",
-              "3X-Large",
-              "4X-Large",
-            ].map((size, index) => (
+          <div className="flex flex-row flex-wrap gap-4">
+            {sizes.map((size, index) => (
               <button
                 key={index}
-                type="button"
-                className={cn([
-                  "bg-[#F0F0F0] m-1 flex items-center justify-center px-5 py-2.5 text-sm rounded-full max-h-[39px]",
-                  selected === size && "bg-black font-medium text-white",
-                ])}
-                onClick={() => setSelected(size)}
+                className={cn(
+                  "px-4 py-2 rounded-md",
+                  {
+                    "bg-black text-white": checkedItems.includes(size),
+                    "bg-gray-200 text-black": !checkedItems.includes(size),
+                  }
+                )}
+                onClick={() => handleCheckboxChange(size)}
               >
                 {size}
               </button>
