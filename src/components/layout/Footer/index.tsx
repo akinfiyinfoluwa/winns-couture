@@ -42,10 +42,7 @@ const Footer = () => {
           <nav className="lg:grid lg:grid-cols-12 mb-8">
             <div className="flex flex-col lg:col-span-3 lg:max-w-[248px]">
            
-              <p className="text-black/60 text-sm mb-9">
-                We have clothes that suits your style and which you’re proud to
-                wear. From women to men.
-              </p>
+            
               <div className="flex items-center">
                 {socialsData.map((social) => (
                   <Link
