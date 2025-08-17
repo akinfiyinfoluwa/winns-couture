@@ -20,7 +20,7 @@ const data: NavMenu = [
     label: "Shop",
     type: "MenuItem",
     children: [],
-    url: "/shop#deals",
+    url: "/",
   },
 
   //Deals” and use this section to showcase bundled offers (e.g., 5 complementary items at a discounted rate).
@@ -29,11 +29,11 @@ const data: NavMenu = [
     id: 2,
     type: "MenuList",
     label: "Deals",
-    url: "/shop#deals",
+    url: "/",
     children: [{
       id: 21,
       label: "5 for 4",
-      url: "/shop#5-for-4",
+      url: "/",
       description: "Get 5 items for the price of 4",
     },
     {
