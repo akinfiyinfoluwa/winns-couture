@@ -1,7 +1,15 @@
-import { compareArrays } from "@/lib/utils";
 import { Discount } from "@/types/product.types";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+
+const compareArrays = (arr1: any[], arr2: any[]): boolean => {
+  if (arr1.length !== arr2.length) return false;
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) return false;
+  }
+  return true;
+};
+
 
 const calcAdjustedTotalPrice = (
   totalPrice: number,
@@ -84,14 +92,7 @@ export const cartsSlice = createSlice({
         state.cart = {
           ...state.cart,
           items: state.cart.items.map((eachCartItem) => {
-            if (
-              eachCartItem.id === action.payload.id
-                ? !compareArrays(
-                    eachCartItem.attributes,
-                    isItemInCart.attributes
-                  )
-                : eachCartItem.id !== action.payload.id
-            )
+            if (eachCartItem.id !== action.payload.id)
               return eachCartItem;
 
             return {
