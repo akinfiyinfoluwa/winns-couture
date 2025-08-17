@@ -3,6 +3,7 @@ import CategoriesSection from "@/components/shop-page/filters/CategoriesSection"
 import ColorsSection from "@/components/shop-page/filters/ColorsSection";
 import PriceSection from "@/components/shop-page/filters/PriceSection";
 import SizeSection from "@/components/shop-page/filters/SizeSection";
+import BrandsSection from "@/components/shop-page/filters/BrandsSection";
 import { Button } from "@/components/ui/button";
 
 interface FiltersProps {
@@ -30,6 +31,8 @@ const Filters: React.FC<FiltersProps> = ({ onChange }) => {
       <ColorsSection onChange={handleFilterChange} />
       <hr className="border-t-black/10" />
       <SizeSection onChange={handleFilterChange} />
+      <hr className="border-t-black/10" />
+      <BrandsSection />
       <Button
         type="button"
         className="bg-black w-full rounded-full text-sm font-medium py-4 h-12"

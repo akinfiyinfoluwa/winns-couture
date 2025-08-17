@@ -6,8 +6,8 @@ import Footer from '@/components/layout/Footer';
 export default function NotFound() {
   return (
     <>
-      <TopBanner />
-      <TopNavbar />
+   
+    
       <main className="flex flex-col items-center justify-center min-h-screen text-center">
         <h1 className="text-4xl font-bold">404 - Page Not Found</h1>
         <p className="mt-4 text-lg">
@@ -20,7 +20,7 @@ export default function NotFound() {
           Go back home
         </Link>
       </main>
-      <Footer />
+  
     </>
   );
 }

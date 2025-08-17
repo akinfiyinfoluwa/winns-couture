@@ -16,4 +16,5 @@ export type Product = {
   sizes: string[];
   colors: string[];
   dressStyle: string;
+  brand?: string;
 };

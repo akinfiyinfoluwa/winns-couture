@@ -47,6 +47,7 @@ export const topSellingData: Product[] = [
     sizes: ["Small", "Medium"],
     colors: ["bg-red-600"],
     dressStyle: "Casual",
+    brand: "mystyle-express",
   },
   {
     id: 2,
@@ -62,6 +63,7 @@ export const topSellingData: Product[] = [
     sizes: ["Large", "X-Large"],
     colors: ["bg-blue-600"],
     dressStyle: "Gym",
+    brand: "mystyle-express",
   },
   {
     id: 3,
@@ -77,6 +79,7 @@ export const topSellingData: Product[] = [
     sizes: ["Medium", "Large"],
     colors: ["bg-white"],
     dressStyle: "Formal",
+    brand: "the-winifred",
   },
   {
     id: 4,
@@ -92,6 +95,7 @@ export const topSellingData: Product[] = [
     sizes: ["Small", "X-Large"],
     colors: ["bg-black"],
     dressStyle: "Casual",
+    brand: "the-winifred",
   },
 ];
 
@@ -110,6 +114,8 @@ export const newArrivalsData: Product[] = [
     sizes: ["Medium", "Large"],
     colors: ["bg-blue-600"],
     dressStyle: "Casual",
+    timeline: "new",
+    brand: "new-arrivals",
   },
   {
     id: 6,
@@ -125,6 +131,8 @@ export const newArrivalsData: Product[] = [
     sizes: ["Small", "Large"],
     colors: ["bg-green-600"],
     dressStyle: "Casual",
+    timeline: "new",
+    brand: "new-arrivals",
   },
   {
     id: 7,
@@ -140,6 +148,8 @@ export const newArrivalsData: Product[] = [
     sizes: ["Medium", "X-Large"],
     colors: ["bg-yellow-300"],
     dressStyle: "Gym",
+    timeline: "new",
+    brand: "new-arrivals",
   },
   {
     id: 8,
@@ -155,6 +165,8 @@ export const newArrivalsData: Product[] = [
     sizes: ["Small", "Medium"],
     colors: ["bg-pink-600"],
     dressStyle: "Party",
+    timeline: "new",
+    brand: "new-arrivals",
   },
 ];
 
@@ -173,6 +185,7 @@ export const relatedProductData: Product[] = [
     sizes: ["Large", "X-Large"],
     colors: ["bg-purple-600"],
     dressStyle: "Casual",
+    brand: "mystyle-express",
   },
   {
     id: 10,
@@ -188,6 +201,7 @@ export const relatedProductData: Product[] = [
     sizes: ["Small", "Medium"],
     colors: ["bg-cyan-400"],
     dressStyle: "Casual",
+    brand: "the-winifred",
   },
   {
     id: 11,
@@ -203,6 +217,7 @@ export const relatedProductData: Product[] = [
     sizes: ["Medium", "Large"],
     colors: ["bg-orange-600"],
     dressStyle: "Casual",
+    brand: "mystyle-express",
   },
   {
     id: 12,
@@ -218,6 +233,7 @@ export const relatedProductData: Product[] = [
     sizes: ["Small", "X-Large"],
     colors: ["bg-black"],
     dressStyle: "Gym",
+    brand: "the-winifred",
   },
 ];
 

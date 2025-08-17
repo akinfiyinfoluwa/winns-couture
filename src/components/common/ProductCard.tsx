@@ -26,16 +26,15 @@ const ProductCard = ({ data }: ProductCardProps) => {
         />
       </div>
       <strong className="text-black xl:text-xl">{data.title}</strong>
-      {data.timeline === "new"?
-        <span className="bg-green-400 text-white text-xs xl:text-sm py-1 px-2 rounded-full mr-2">
-          {data.timeline}
-        </span>: <Rating  initialValue={data.rating}
-          allowFraction
-          SVGclassName="inline-block"
-          size={23}
-          readonly />
-      }
       <div className="flex items-center space-x-[5px] xl:space-x-2.5">
+       
+        {data.timeline === "new" && (
+          <span className="bg-green-400 text-white text-xs xl:text-sm py-1 px-2 rounded-full mr-2">
+            {data.timeline}
+          </span>
+        )}
+      </div>
+      <div className="flex items-center space-x-[5px] xl:space-x-2.5 mt-2">
         {data.discount.percentage > 0 ? (
           <span className="font-bold text-black text-xl xl:text-2xl">
             {`$${Math.round(
