@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Product } from "@/types/product.types";
 import { Button } from "../ui/button";
 import Rating from "../ui/Rating";
+import { generateSlug } from "@/lib/utils";
 
 type ProductCardProps = {
   data: Product;
@@ -12,7 +13,7 @@ type ProductCardProps = {
 const ProductCard = ({ data }: ProductCardProps) => {
   return (
     <Link
-      href={`/${data.id}/${data.title.split(" ").join("-")}`}
+      href={`/product/${generateSlug(data.title)}`}
       className="flex flex-col items-start aspect-auto border border-black/10 hover:border-yellow-600 transition-all duration-300 p-4 rounded-xl"
     >
       <div className="bg-[#F0EEED] rounded-[13px] lg:rounded-[20px] w-full lg:max-w-[295px] aspect-square mb-2.5 xl:mb-4 overflow-hidden">

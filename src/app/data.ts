@@ -35,7 +35,7 @@ export const reviewsData: Review[] = [
 export const topSellingData: Product[] = [
   {
     id: 1,
-    title: "Product 1",
+    title: "Classic White T-Shirt",
     price: 100,
     rating: 4.5,
     srcUrl: "/images/pic1.png",
@@ -51,7 +51,7 @@ export const topSellingData: Product[] = [
   },
   {
     id: 2,
-    title: "Product 2",
+    title: "Blue Denim Shorts",
     price: 200,
     rating: 4.2,
     srcUrl: "/images/pic2.png",
@@ -67,7 +67,7 @@ export const topSellingData: Product[] = [
   },
   {
     id: 3,
-    title: "Product 3",
+    title: "Formal White Shirt",
     price: 150,
     rating: 4.8,
     srcUrl: "/images/pic3.png",
@@ -83,7 +83,7 @@ export const topSellingData: Product[] = [
   },
   {
     id: 4,
-    title: "Product 4",
+    title: "Black Hoodie",
     price: 250,
     rating: 4.0,
     srcUrl: "/images/pic4.png",
@@ -102,7 +102,7 @@ export const topSellingData: Product[] = [
 export const newArrivalsData: Product[] = [
   {
     id: 5,
-    title: "Product 5",
+    title: "Blue Jeans",
     price: 120,
     rating: 4.6,
     srcUrl: "/images/pic5.png",
@@ -119,7 +119,7 @@ export const newArrivalsData: Product[] = [
   },
   {
     id: 6,
-    title: "Product 6",
+    title: "Green T-Shirt",
     price: 220,
     rating: 4.3,
     srcUrl: "/images/pic6.png",
@@ -136,7 +136,7 @@ export const newArrivalsData: Product[] = [
   },
   {
     id: 7,
-    title: "Product 7",
+    title: "Yellow Shorts",
     price: 180,
     rating: 4.9,
     srcUrl: "/images/pic7.png",
@@ -153,7 +153,7 @@ export const newArrivalsData: Product[] = [
   },
   {
     id: 8,
-    title: "Product 8",
+    title: "Pink Party Dress",
     price: 280,
     rating: 4.1,
     srcUrl: "/images/pic8.png",
@@ -173,7 +173,7 @@ export const newArrivalsData: Product[] = [
 export const relatedProductData: Product[] = [
   {
     id: 9,
-    title: "Product 9",
+    title: "Purple Hoodie",
     price: 130,
     rating: 4.7,
     srcUrl: "/images/pic9.png",
@@ -189,7 +189,7 @@ export const relatedProductData: Product[] = [
   },
   {
     id: 10,
-    title: "Product 10",
+    title: "Cyan Jeans",
     price: 230,
     rating: 4.4,
     srcUrl: "/images/pic10.png",
@@ -205,7 +205,7 @@ export const relatedProductData: Product[] = [
   },
   {
     id: 11,
-    title: "Product 11",
+    title: "Orange T-Shirt",
     price: 190,
     rating: 5.0,
     srcUrl: "/images/pic11.png",
@@ -221,7 +221,7 @@ export const relatedProductData: Product[] = [
   },
   {
     id: 12,
-    title: "Product 12",
+    title: "Black Gym Shorts",
     price: 290,
     rating: 4.2,
     srcUrl: "/images/pic12.png",
