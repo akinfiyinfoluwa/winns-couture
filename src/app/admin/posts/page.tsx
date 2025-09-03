@@ -21,6 +21,7 @@ interface Post {
   status: 'draft' | 'published';
   category: string;
   date: string;
+  srcUrl: string;
 }
 
 // Sample data - in a real app this would come from an API/database
@@ -31,6 +32,7 @@ const samplePosts: Post[] = [
     status: 'published',
     category: 'Fashion',
     date: '2025-08-01',
+    srcUrl: '/images/pic1.png',
   },
   {
     id: '2',
@@ -38,6 +40,7 @@ const samplePosts: Post[] = [
     status: 'draft',
     category: 'Style Guide',
     date: '2025-08-15',
+    srcUrl: '/images/pic2.png',
   },
   {
     id: '3',
@@ -45,6 +48,7 @@ const samplePosts: Post[] = [
     status: 'published',
     category: 'Sustainability',
     date: '2025-08-20',
+    srcUrl: '/images/pic3.png',
   }
 ]
 
@@ -60,24 +64,26 @@ function Page(props: Props) {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold">Posts</h1>
-            <Sheet open={open} onOpenChange={setOpen}>
+            <Sheet>
               <SheetTrigger asChild>
                 <Button className="flex items-center gap-2">
                   <FiPlus className="w-4 h-4" />
                   New Post
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="max-w-lg w-full overflow-y-auto max-h-screen">
+              <SheetContent side="right" className="max-w-3xl w-full overflow-y-auto max-h-screen">
                 <SheetHeader>
                   <SheetTitle>Create New Product</SheetTitle>
                 </SheetHeader>
                 <ProductForm
-                  onCancel={() => setOpen(false)}
+                  onCancel={() => {
+                    // close sheet by clicking outside or using close button
+                  }}
                   onSave={data => {
                     // handle save (e.g., add to posts, API call, etc.)
-                    setOpen(false)
                   }}
                 />
+                <SheetFooter />
               </SheetContent>
             </Sheet>
           </div>
@@ -87,6 +93,7 @@ function Page(props: Props) {
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 border-b">
                   <tr>
+                    <th className="text-left px-6 py-4 font-medium text-gray-500">Image</th>
                     <th className="text-left px-6 py-4 font-medium text-gray-500">Title</th>
                     <th className="text-left px-6 py-4 font-medium text-gray-500">Category</th>
                     <th className="text-left px-6 py-4 font-medium text-gray-500">Status</th>
@@ -97,6 +104,9 @@ function Page(props: Props) {
                 <tbody className="divide-y">
                   {samplePosts.map((post) => (
                     <tr key={post.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4">
+                        <img src={post.srcUrl || '/images/pic1.png'} alt={post.title} className="w-12 h-12 object-cover rounded border" />
+                      </td>
                       <td className="px-6 py-4">{post.title}</td>
                       <td className="px-6 py-4">{post.category}</td>
                       <td className="px-6 py-4">
