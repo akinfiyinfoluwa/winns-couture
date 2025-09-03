@@ -19,6 +19,7 @@ interface ProductFormProps {
     title?: string;
     image?: string;
     price?: string;
+    description?: string; 
     discount?: Discount;
     category?: string;
     sizes?: string[];
@@ -31,6 +32,7 @@ interface ProductFormProps {
 
 const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData }) => {
   const [title, setTitle] = useState(initialData?.title || '')
+  const [description, setDescription] = useState(initialData?.description || '')
   const [image, setImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image || null)
   const [price, setPrice] = useState(initialData?.price || '')
@@ -73,6 +75,15 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
           onChange={e => setTitle(e.target.value)}
           placeholder="Enter product title"
           className={inputClass}
+        />
+      </div>
+       <div>
+        <label className="block text-sm font-medium mb-1">Description</label>
+        <InputGroup.Input
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          placeholder="Ex: this product is made for indian bosschicks"
+          className={`${inputClass} p-5`}
         />
       </div>
       <div className="flex gap-3">
@@ -225,6 +236,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
           type="button" 
           onClick={() => onSave({ 
             title, 
+            description,
             image: image || imagePreview, // Send either new file or existing image URL
             price, 
             discount, 
