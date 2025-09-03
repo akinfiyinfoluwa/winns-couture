@@ -63,6 +63,7 @@ function Page(props: Props) {
     const [posts, setPosts] = useState<Post[]>(samplePosts)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [postToDelete, setPostToDelete] = useState<Post | null>(null)
+    const [editingPost, setEditingPost] = useState<Post | null>(null)
 
     const handleDeleteClick = (post: Post) => {
         setPostToDelete(post)
@@ -96,26 +97,48 @@ function Page(props: Props) {
                 className="w-[90vw] sm:max-w-3xl h-screen p-0"
               >
                 <SheetHeader className="p-6 border-b">
-                  <SheetTitle>Create New Product</SheetTitle>
+                  <SheetTitle>{editingPost ? 'Edit Product' : 'Create New Product'}</SheetTitle>
                 </SheetHeader>
                 <div className="overflow-y-auto h-[calc(100vh-80px)] p-6 pt-4">
                   <ProductForm
                     onCancel={() => {
                       setOpen(false)
+                      setEditingPost(null)
                     }}
                     onSave={data => {
-                      // Add new post logic here
-                      setPosts(prev => [{
-                        id: (prev.length + 1).toString(),
-                        title: data.title,
-                        status: 'draft',
-                        category: data.category,
-                        date: new Date().toISOString().split('T')[0],
-                        srcUrl: data.image ? URL.createObjectURL(data.image) : '/images/pic1.png'
-                      }, ...prev])
+                      if (editingPost) {
+                        // Update existing post
+                        setPosts(prev => prev.map(post => 
+                          post.id === editingPost.id 
+                            ? {
+                                ...post,
+                                title: data.title,
+                                category: data.category,
+                                srcUrl: data.image instanceof File ? URL.createObjectURL(data.image) : data.image
+                              }
+                            : post
+                        ))
+                        toast.success('Product updated successfully!')
+                      } else {
+                        // Add new post
+                        setPosts(prev => [{
+                          id: (prev.length + 1).toString(),
+                          title: data.title,
+                          status: 'draft',
+                          category: data.category,
+                          date: new Date().toISOString().split('T')[0],
+                          srcUrl: data.image instanceof File ? URL.createObjectURL(data.image) : '/images/pic1.png'
+                        }, ...prev])
+                        toast.success('Product created successfully!')
+                      }
                       setOpen(false)
-                      toast.success('Product created successfully!')
+                      setEditingPost(null)
                     }}
+                    initialData={editingPost ? {
+                      title: editingPost.title,
+                      category: editingPost.category,
+                      image: editingPost.srcUrl
+                    } : undefined}
                   />
                 </div>
               </SheetContent>
@@ -154,7 +177,15 @@ function Page(props: Props) {
                       </td>
                       <td className="px-6 py-4">{post.date}</td>
                       <td className="px-6 py-4 text-right space-x-2">
-                        <Button variant="ghost" size="sm" className="hover:bg-gray-100">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="hover:bg-gray-100"
+                          onClick={() => {
+                            setEditingPost(post)
+                            setOpen(true)
+                          }}
+                        >
                           <FiEdit2 className="w-4 h-4" />
                         </Button>
                         <Button variant="ghost" size="sm" className="hover:bg-gray-100 text-red-600 hover:text-red-700" onClick={() => handleDeleteClick(post)}>

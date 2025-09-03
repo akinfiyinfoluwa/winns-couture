@@ -15,20 +15,32 @@ interface Discount {
 interface ProductFormProps {
   onCancel: () => void;
   onSave: (data: any) => void;
+  initialData?: {
+    title?: string;
+    image?: string;
+    price?: string;
+    discount?: Discount;
+    category?: string;
+    sizes?: string[];
+    colors?: string[];
+    dressStyle?: string;
+    brand?: string;
+    features?: Feature[];
+  };
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
-  const [title, setTitle] = useState('')
+const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData }) => {
+  const [title, setTitle] = useState(initialData?.title || '')
   const [image, setImage] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [price, setPrice] = useState('')
-  const [discount, setDiscount] = useState<Discount>({ amount: '', percentage: '' })
-  const [category, setCategory] = useState('')
-  const [sizes, setSizes] = useState('')
-  const [colors, setColors] = useState('')
-  const [dressStyle, setDressStyle] = useState('')
-  const [brand, setBrand] = useState('')
-  const [features, setFeatures] = useState<Feature[]>([{ label: '', value: '' }])
+  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image || null)
+  const [price, setPrice] = useState(initialData?.price || '')
+  const [discount, setDiscount] = useState<Discount>(initialData?.discount || { amount: '', percentage: '' })
+  const [category, setCategory] = useState(initialData?.category || '')
+  const [sizes, setSizes] = useState(initialData?.sizes?.[0] || '')
+  const [colors, setColors] = useState(initialData?.colors?.[0] || '')
+  const [dressStyle, setDressStyle] = useState(initialData?.dressStyle || '')
+  const [brand, setBrand] = useState(initialData?.brand || '')
+  const [features, setFeatures] = useState<Feature[]>(initialData?.features || [{ label: '', value: '' }])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -85,17 +97,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
         )}
       </div>
       <div className="flex gap-3">
-        <div className="w-1/2">
-          <label className="block text-sm font-medium mb-1">Discount Amount</label>
-          <InputGroup.Input
-            type="number"
-            value={discount.amount}
-            onChange={e => setDiscount(d => ({ ...d, amount: e.target.value }))}
-            placeholder="10"
-            min={0}
-            className={inputClass}
-          />
-        </div>
+ 
         <div className="w-1/2">
           <label className="block text-sm font-medium mb-1">Discount %</label>
           <InputGroup.Input
@@ -173,7 +175,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium mb-1">Product Spec</label>
+        <label className="block text-sm font-medium mb-1">Product Specication</label>
         <div className="space-y-3 max-w-xl mx-auto">
           {features.map((feature, idx) => (
             <div
@@ -201,7 +203,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
                 disabled={features.length === 1}
                 className="ml-2"
               >
-                <span className="text-lg">&times;</span>
+                <span className="text-lg borderp-2 text-white bg-red-800 p-2 px-4 rounded-sm" style={{backgroundColor:"#991b1b", border: "1px solid red"}}>&times;</span>
               </Button>
             </div>
           ))}
@@ -219,7 +221,23 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
       </div>
       <div className="flex justify-end gap-2 mt-6">
         <Button type="button" variant="secondary" onClick={onCancel}>Cancel</Button>
-        <Button type="button" onClick={() => onSave({ title, image, price, discount, category, sizes, colors, dressStyle, brand, features })}>Save</Button>
+        <Button 
+          type="button" 
+          onClick={() => onSave({ 
+            title, 
+            image: image || imagePreview, // Send either new file or existing image URL
+            price, 
+            discount, 
+            category, 
+            sizes: [sizes], // Convert to array
+            colors: [colors], // Convert to array
+            dressStyle, 
+            brand, 
+            features 
+          })}
+        >
+          Save
+        </Button>
       </div>
     </form>
   )
