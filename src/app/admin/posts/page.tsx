@@ -24,6 +24,7 @@ interface Post {
   status: 'draft' | 'published';
   category: string;
   date: string;
+  price: string;
   srcUrl: string;
 }
 
@@ -35,6 +36,7 @@ const samplePosts: Post[] = [
     status: 'published',
     category: 'Fashion',
     date: '2025-08-01',
+    price: '200000',
     srcUrl: '/images/pic1.png',
   },
   {
@@ -43,6 +45,7 @@ const samplePosts: Post[] = [
     status: 'draft',
     category: 'Style Guide',
     date: '2025-08-15',
+    price: '200000',
     srcUrl: '/images/pic2.png',
   },
   {
@@ -51,6 +54,7 @@ const samplePosts: Post[] = [
     status: 'published',
     category: 'Sustainability',
     date: '2025-08-20',
+    price: '200000',
     srcUrl: '/images/pic3.png',
   }
 ]
@@ -127,6 +131,7 @@ function Page(props: Props) {
                           status: 'draft',
                           category: data.category,
                           date: new Date().toISOString().split('T')[0],
+                          price: data.price,
                           srcUrl: data.image instanceof File ? URL.createObjectURL(data.image) : '/images/pic1.png'
                         }, ...prev])
                         toast.success('Product created successfully!')
@@ -155,6 +160,7 @@ function Page(props: Props) {
                     <th className="text-left px-6 py-4 font-medium text-gray-500">Category</th>
                     <th className="text-left px-6 py-4 font-medium text-gray-500">Status</th>
                     <th className="text-left px-6 py-4 font-medium text-gray-500">Date</th>
+                    <th className="text-left px-6 py-4 font-medium text-gray-500">Price</th>
                     <th className="text-right px-6 py-4 font-medium text-gray-500">Actions</th>
                   </tr>
                 </thead>
@@ -176,6 +182,7 @@ function Page(props: Props) {
                         </span>
                       </td>
                       <td className="px-6 py-4">{post.date}</td>
+                      <td className="px-6 py-4">{post.price}</td>
                       <td className="px-6 py-4 text-right space-x-2">
                         <Button 
                           variant="ghost" 
