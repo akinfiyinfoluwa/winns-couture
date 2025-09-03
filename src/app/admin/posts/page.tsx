@@ -84,26 +84,40 @@ function Page(props: Props) {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold">Posts</h1>
-            <Sheet>
+            <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
-                <Button className="flex items-center gap-2">
+                <Button className="flex items-center gap-2" onClick={() => setOpen(true)}>
                   <FiPlus className="w-4 h-4" />
                   New Post
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="max-w-5xl w-full overflow-y-auto max-h-screen">
-                <SheetHeader>
+              <SheetContent 
+                side="right" 
+                className="w-[90vw] sm:max-w-3xl h-screen p-0"
+              >
+                <SheetHeader className="p-6 border-b">
                   <SheetTitle>Create New Product</SheetTitle>
                 </SheetHeader>
-                <ProductForm
-                  onCancel={() => {
-                    // close sheet by clicking outside or using close button
-                  }}
-                  onSave={data => {
-                    // handle save (e.g., add to posts, API call, etc.)
-                  }}
-                />
-                <SheetFooter />
+                <div className="overflow-y-auto h-[calc(100vh-80px)] p-6 pt-4">
+                  <ProductForm
+                    onCancel={() => {
+                      setOpen(false)
+                    }}
+                    onSave={data => {
+                      // Add new post logic here
+                      setPosts(prev => [{
+                        id: (prev.length + 1).toString(),
+                        title: data.title,
+                        status: 'draft',
+                        category: data.category,
+                        date: new Date().toISOString().split('T')[0],
+                        srcUrl: data.image ? URL.createObjectURL(data.image) : '/images/pic1.png'
+                      }, ...prev])
+                      setOpen(false)
+                      toast.success('Product created successfully!')
+                    }}
+                  />
+                </div>
               </SheetContent>
             </Sheet>
           </div>

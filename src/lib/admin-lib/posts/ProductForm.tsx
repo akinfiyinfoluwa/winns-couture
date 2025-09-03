@@ -51,7 +51,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
   const inputClass = 'border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-black/20 bg-white'
 
   return (
-    <form className="space-y-5 mt-4">
+    <form className="space-y-5">
       <div>
         <label className="block text-sm font-medium mb-1">Title</label>
         <InputGroup.Input
@@ -174,28 +174,48 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium mb-1">Features</label>
-        <div className="space-y-3">
+        <label className="block text-sm font-medium mb-1">Product Spec</label>
+        <div className="space-y-3 max-w-xl mx-auto">
           {features.map((feature, idx) => (
-            <div key={idx} className="flex gap-2 items-center">
+            <div
+              key={idx}
+              className="flex flex-row items-center gap-3 py-1 w-full"
+              style={{ alignItems: 'center' }}
+            >
               <InputGroup.Input
                 value={feature.label}
                 onChange={e => handleFeatureChange(idx, 'label', e.target.value)}
                 placeholder="Label (e.g. Material)"
-                className={inputClass + ' w-1/3'}
+                className={inputClass + ' flex-1 min-w-0'}
               />
               <InputGroup.Input
                 value={feature.value}
                 onChange={e => handleFeatureChange(idx, 'value', e.target.value)}
                 placeholder="Value (e.g. 100% Cotton)"
-                className={inputClass + ' w-2/3'}
+                className={inputClass + ' flex-1 min-w-0'}
               />
-              <Button type="button" size="icon" variant="ghost" onClick={() => removeFeature(idx)} disabled={features.length === 1}>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={() => removeFeature(idx)}
+                disabled={features.length === 1}
+                className="ml-2"
+              >
                 <span className="text-lg">&times;</span>
               </Button>
             </div>
           ))}
-          <Button type="button" variant="outline" size="sm" onClick={addFeature} className="mt-2">+ Add Feature</Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={addFeature}
+            className="mt-2"
+            disabled={features.length >= 4}
+          >
+            + Add Feature
+          </Button>
         </div>
       </div>
       <div className="flex justify-end gap-2 mt-6">
