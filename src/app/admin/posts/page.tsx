@@ -14,6 +14,9 @@ import { Button } from '@/components/ui/button'
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi'
 import ProductForm from '@/lib/admin-lib/posts/ProductForm'
 import { Sidebar } from '@/components/admin/Sidebar/Sidebar'
+import ConfirmModal from '@/lib/admin-lib/posts/ConfirmModal'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 interface Post {
   id: string;
@@ -57,6 +60,23 @@ interface Props {}
 function Page(props: Props) {
     const {} = props
     const [open, setOpen] = useState(false)
+    const [posts, setPosts] = useState<Post[]>(samplePosts)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [postToDelete, setPostToDelete] = useState<Post | null>(null)
+
+    const handleDeleteClick = (post: Post) => {
+        setPostToDelete(post)
+        setIsModalOpen(true)
+    }
+
+    const handleConfirmDelete = () => {
+        if (postToDelete) {
+            setPosts(posts.filter(p => p.id !== postToDelete.id))
+            toast.success(`Post "${postToDelete.title}" deleted successfully!`)
+            setIsModalOpen(false)
+            setPostToDelete(null)
+        }
+    }
 
     return (
       <main className="grid gap-4 p-4 md:grid-cols-[220px,_1fr] grid-cols-[1fr]">
@@ -102,7 +122,7 @@ function Page(props: Props) {
                   </tr>
                 </thead>
                 <tbody className="divide-y">
-                  {samplePosts.map((post) => (
+                  {posts.map((post) => (
                     <tr key={post.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <img src={post.srcUrl || '/images/pic1.png'} alt={post.title} className="w-12 h-12 object-cover rounded border" />
@@ -123,7 +143,7 @@ function Page(props: Props) {
                         <Button variant="ghost" size="sm" className="hover:bg-gray-100">
                           <FiEdit2 className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="hover:bg-gray-100 text-red-600 hover:text-red-700">
+                        <Button variant="ghost" size="sm" className="hover:bg-gray-100 text-red-600 hover:text-red-700" onClick={() => handleDeleteClick(post)}>
                           <FiTrash2 className="w-4 h-4" />
                         </Button>
                       </td>
@@ -134,6 +154,14 @@ function Page(props: Props) {
             </div>
           </div>
         </div>
+        <ConfirmModal
+            open={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onConfirm={handleConfirmDelete}
+            title="Delete Post"
+            description="Are you sure you want to delete this post? This action cannot be undone."
+        />
+        <ToastContainer />
       </main>
     )
 }
