@@ -182,7 +182,12 @@ function Page(props: Props) {
                         </span>
                       </td>
                       <td className="px-6 py-4">{post.date}</td>
-                      <td className="px-6 py-4">{post.price}</td>
+                      <td className="px-6 py-4">
+                        {new Intl.NumberFormat('en-NG', {
+                          style: 'currency',
+                          currency: 'NGN',
+                        }).format(parseInt(post.price, 10))}
+                      </td>
                       <td className="px-6 py-4 text-right space-x-2">
                         <Button 
                           variant="ghost" 
