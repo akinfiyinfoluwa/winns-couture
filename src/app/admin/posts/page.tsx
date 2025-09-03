@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi'
 import ProductForm from '@/lib/admin-lib/posts/ProductForm'
 import { Sidebar } from '@/components/admin/Sidebar/Sidebar'
-import ConfirmModal from '@/lib/admin-lib/posts/ConfirmModal'
+import ConfirmModal from '@/lib/admin-lib/posts/DeleteModal'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 

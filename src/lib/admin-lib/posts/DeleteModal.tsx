@@ -9,7 +9,7 @@ interface ConfirmModalProps {
   description?: string
 }
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({ open, onClose, onConfirm, title, description }) => {
+const DeleteModal: React.FC<ConfirmModalProps> = ({ open, onClose, onConfirm, title, description }) => {
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/80 pointer-events-none">
@@ -25,4 +25,4 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ open, onClose, onConfirm, t
   )
 }
 
-export default ConfirmModal
+export default DeleteModal
