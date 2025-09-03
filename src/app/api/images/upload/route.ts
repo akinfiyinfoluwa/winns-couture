@@ -3,12 +3,10 @@
 
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import client from "../../../../../utils/supabase/client";
 
 // Initialize Supabase (server-side key for storage)
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // Use service role key for server uploads
-);
+const supabase = client
 
 export async function POST(req: Request) {
   try {
@@ -28,7 +26,7 @@ export async function POST(req: Request) {
     const { data, error } = await supabase.storage
       .from("images") // Ensure you have a bucket named 'images'
       .upload(fileName, fileBuffer, {
-        contentType: file.type,
+        contentType: file.type
       });
 
     if (error) {
