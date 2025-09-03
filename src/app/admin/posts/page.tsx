@@ -91,7 +91,7 @@ function Page(props: Props) {
                   New Post
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="max-w-3xl w-full overflow-y-auto max-h-screen">
+              <SheetContent side="right" className="max-w-5xl w-full overflow-y-auto max-h-screen">
                 <SheetHeader>
                   <SheetTitle>Create New Product</SheetTitle>
                 </SheetHeader>

@@ -22,7 +22,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
   const [image, setImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [price, setPrice] = useState('')
-  const [rating, setRating] = useState('')
   const [discount, setDiscount] = useState<Discount>({ amount: '', percentage: '' })
   const [category, setCategory] = useState('')
   const [sizes, setSizes] = useState('')
@@ -74,19 +73,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
             className={inputClass}
           />
         </div>
-        <div className="w-1/2">
-          <label className="block text-sm font-medium mb-1">Rating</label>
-          <InputGroup.Input
-            type="number"
-            value={rating}
-            onChange={e => setRating(e.target.value)}
-            placeholder="4.5"
-            min={0}
-            max={5}
-            step={0.1}
-            className={inputClass}
-          />
-        </div>
+        
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Image</label>
@@ -131,22 +118,35 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
       </div>
       <div className="flex gap-3">
         <div className="w-1/2">
-          <label className="block text-sm font-medium mb-1">Sizes (comma separated)</label>
-          <InputGroup.Input
+          <label className="block text-sm font-medium mb-1">Sizes</label>
+          <select
             value={sizes}
             onChange={e => setSizes(e.target.value)}
-            placeholder="Small, Medium"
             className={inputClass}
-          />
+          >
+            <option value="">Select a size</option>
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+          </select>
         </div>
         <div className="w-1/2">
-          <label className="block text-sm font-medium mb-1">Colors (comma separated)</label>
-          <InputGroup.Input
+          <label className="block text-sm font-medium mb-1">Colors</label>
+          <select
             value={colors}
             onChange={e => setColors(e.target.value)}
-            placeholder="bg-red-600, bg-blue-600"
             className={inputClass}
-          />
+          >
+            <option value="">Select a color</option>
+            <option value="bg-red-600">Red</option>
+            <option value="bg-blue-600">Blue</option>
+            <option value="bg-green-600">Green</option>
+            <option value="bg-yellow-400">Yellow</option>
+            <option value="bg-black">Black</option>
+            <option value="bg-white">White</option>
+          </select>
         </div>
       </div>
       <div className="flex gap-3">
@@ -161,12 +161,16 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
         </div>
         <div className="w-1/2">
           <label className="block text-sm font-medium mb-1">Brand</label>
-          <InputGroup.Input
+          <select
             value={brand}
             onChange={e => setBrand(e.target.value)}
-            placeholder="mystyle-express"
             className={inputClass}
-          />
+          >
+            <option value="">Select a brand</option>
+            <option value="mystyle-express">MyStyle Express</option>
+            <option value="gucci">The WinifredAkin RTW</option>
+          
+          </select>
         </div>
       </div>
       <div>
@@ -196,7 +200,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
       </div>
       <div className="flex justify-end gap-2 mt-6">
         <Button type="button" variant="secondary" onClick={onCancel}>Cancel</Button>
-        <Button type="button" onClick={() => onSave({ title, image, price, rating, discount, category, sizes, colors, dressStyle, brand, features })}>Save</Button>
+        <Button type="button" onClick={() => onSave({ title, image, price, discount, category, sizes, colors, dressStyle, brand, features })}>Save</Button>
       </div>
     </form>
   )
