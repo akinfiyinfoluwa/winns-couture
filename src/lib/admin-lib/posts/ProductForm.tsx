@@ -48,7 +48,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
   const addFeature = () => setFeatures(prev => [...prev, { label: '', value: '' }])
   const removeFeature = (idx: number) => setFeatures(prev => prev.length > 1 ? prev.filter((_, i) => i !== idx) : prev)
 
-  const inputClass = 'border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-black/20 bg-white'
+  const inputClass = 'rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-black/20 bg-white input-class'
+
+  
 
   return (
     <form className="space-y-5">
@@ -116,9 +118,18 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
           className={inputClass}
         />
       </div>
+      <div>
+        <label className="block text-sm font-medium mb-1">Dress Style</label>
+        <InputGroup.Input
+          value={dressStyle}
+          onChange={e => setDressStyle(e.target.value)}
+          placeholder="Casual"
+          className={inputClass}
+        />
+      </div>
       <div className="flex gap-3">
-        <div className="w-1/2">
-          <label className="block text-sm font-medium mb-1">Sizes</label>
+        <div className="flex-1">
+          <label className="block text-sm font-medium mb-1">Size</label>
           <select
             value={sizes}
             onChange={e => setSizes(e.target.value)}
@@ -132,8 +143,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
             <option value="XXL">XXL</option>
           </select>
         </div>
-        <div className="w-1/2">
-          <label className="block text-sm font-medium mb-1">Colors</label>
+        <div className="flex-1">
+          <label className="block text-sm font-medium mb-1">Color</label>
           <select
             value={colors}
             onChange={e => setColors(e.target.value)}
@@ -148,18 +159,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
             <option value="bg-white">White</option>
           </select>
         </div>
-      </div>
-      <div className="flex gap-3">
-        <div className="w-1/2">
-          <label className="block text-sm font-medium mb-1">Dress Style</label>
-          <InputGroup.Input
-            value={dressStyle}
-            onChange={e => setDressStyle(e.target.value)}
-            placeholder="Casual"
-            className={inputClass}
-          />
-        </div>
-        <div className="w-1/2">
+        <div className="flex-1">
           <label className="block text-sm font-medium mb-1">Brand</label>
           <select
             value={brand}
@@ -169,7 +169,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave }) => {
             <option value="">Select a brand</option>
             <option value="mystyle-express">MyStyle Express</option>
             <option value="gucci">The WinifredAkin RTW</option>
-          
           </select>
         </div>
       </div>
