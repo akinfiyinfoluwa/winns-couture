@@ -26,6 +26,7 @@ interface Post {
   date: string;
   price: string;
   srcUrl: string;
+  published: boolean;
 }
 
 // Sample data - in a real app this would come from an API/database
@@ -38,6 +39,7 @@ const samplePosts: Post[] = [
     date: '2025-08-01',
     price: '200000',
     srcUrl: '/images/pic1.png',
+    published: true
   },
   {
     id: '2',
@@ -47,6 +49,8 @@ const samplePosts: Post[] = [
     date: '2025-08-15',
     price: '200000',
     srcUrl: '/images/pic2.png',
+    published: true
+
   },
   {
     id: '3',
@@ -56,6 +60,8 @@ const samplePosts: Post[] = [
     date: '2025-08-20',
     price: '200000',
     srcUrl: '/images/pic3.png',
+    published: true
+
   }
 ]
 
@@ -132,7 +138,8 @@ function Page(props: Props) {
                           category: data.category,
                           date: new Date().toISOString().split('T')[0],
                           price: data.price,
-                          srcUrl: data.image instanceof File ? URL.createObjectURL(data.image) : '/images/pic1.png'
+                          srcUrl: data.image instanceof File ? URL.createObjectURL(data.image) : '/images/pic1.png',
+                          published: data.published
                         }, ...prev])
                         toast.success('Product created successfully!')
                       }
@@ -142,7 +149,8 @@ function Page(props: Props) {
                     initialData={editingPost ? {
                       title: editingPost.title,
                       category: editingPost.category,
-                      image: editingPost.srcUrl
+                      image: editingPost.srcUrl,
+                      published: editingPost.published
                     } : undefined}
                   />
                 </div>

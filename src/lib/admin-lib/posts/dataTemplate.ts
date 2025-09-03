@@ -1,10 +1,4 @@
- export const sizeOptions = [
-    { value: 'Small', label: 'Small' },
-    { value: 'Medium', label: 'Medium' },
-    { value: 'Large', label: 'Large' },
-    { value: 'XL', label: 'XL' },
-    { value: 'XXL', label: 'XXL' },
-  ];
+
 
   export const colorOptions = [
     { value: 'bg-red-600', label: 'Red' },

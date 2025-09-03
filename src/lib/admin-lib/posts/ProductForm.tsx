@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import InputGroup from '@/components/ui/input-group'
 import { Button } from '@/components/ui/button'
 import MultiSelectDropdown from './MultiSelect';
-import { colorOptions, sizeOptions } from './dataTemplate';
+import { colorOptions } from './dataTemplate';
 
 interface Feature {
   label: string;
@@ -29,6 +29,7 @@ interface ProductFormProps {
     dressStyle?: string;
     brand?: string;
     features?: Feature[];
+    published: boolean;
   };
 }
 
@@ -46,6 +47,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
   const [colors, setColors] = useState<string[]>(initialData?.colors || [])
   const [dressStyle, setDressStyle] = useState(initialData?.dressStyle || '')
   const [brand, setBrand] = useState(initialData?.brand || '')
+  const [published, setPublished] = useState()
   const [features, setFeatures] = useState<Feature[]>(initialData?.features || [{ label: '', value: '' }])
 
 
@@ -166,16 +168,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
         {/* Sizes, Colors, and Brand - Responsive Layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1 sm:mb-2">Sizes</label>
-            <MultiSelectDropdown
-              options={sizeOptions}
-              selectedValues={sizes}
-              onChange={setSizes}
-              placeholder="Select sizes"
-              label="size"
-            />
-          </div>
-          <div>
             <label className="block text-sm font-medium mb-1 sm:mb-2">Colors</label>
             <MultiSelectDropdown
               options={colorOptions}
@@ -275,7 +267,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
               colors,
               dressStyle, 
               brand, 
-              features 
+              features,
+              published
             })}
             className="w-full sm:w-auto order-1 sm:order-2"
           >
