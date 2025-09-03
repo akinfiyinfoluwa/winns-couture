@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import InputGroup from '@/components/ui/input-group'
 import { Button } from '@/components/ui/button'
 
@@ -30,6 +30,88 @@ interface ProductFormProps {
   };
 }
 
+// Multi-select dropdown component
+interface MultiSelectDropdownProps {
+  options: { value: string; label: string }[];
+  selectedValues: string[];
+  onChange: (values: string[]) => void;
+  placeholder: string;
+  label: string;
+}
+
+const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
+  options,
+  selectedValues,
+  onChange,
+  placeholder,
+  label
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleToggleOption = (value: string) => {
+    if (selectedValues.includes(value)) {
+      onChange(selectedValues.filter(v => v !== value));
+    } else {
+      onChange([...selectedValues, value]);
+    }
+  };
+
+  const displayText = selectedValues.length === 0 
+    ? placeholder 
+    : `${selectedValues.length} ${label.toLowerCase()}${selectedValues.length === 1 ? '' : 's'} selected`;
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-black/20 bg-white border border-gray-300 text-left flex justify-between items-center"
+      >
+        <span className={selectedValues.length === 0 ? 'text-gray-500' : 'text-black'}>
+          {displayText}
+        </span>
+        <span className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+          ▼
+        </span>
+      </button>
+      
+      {isOpen && (
+        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded shadow-lg max-h-48 overflow-y-auto">
+          {options.map((option) => (
+            <label
+              key={option.value}
+              className="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                checked={selectedValues.includes(option.value)}
+                onChange={() => handleToggleOption(option.value)}
+                className="mr-2 rounded"
+              />
+              <span className="flex-1">{option.label}</span>
+              {option.value.startsWith('bg-') && (
+                <div className={`w-4 h-4 rounded-full ml-2 ${option.value} ${option.value === 'bg-white' ? 'border border-gray-300' : ''}`}></div>
+              )}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData }) => {
   const [title, setTitle] = useState(initialData?.title || '')
   const [description, setDescription] = useState(initialData?.description || '')
@@ -38,11 +120,28 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
   const [price, setPrice] = useState(initialData?.price || '')
   const [discount, setDiscount] = useState<Discount>(initialData?.discount || { amount: '', percentage: '' })
   const [category, setCategory] = useState(initialData?.category || '')
-  const [sizes, setSizes] = useState(initialData?.sizes?.[0] || '')
-  const [colors, setColors] = useState(initialData?.colors?.[0] || '')
+  const [sizes, setSizes] = useState<string[]>(initialData?.sizes || [])
+  const [colors, setColors] = useState<string[]>(initialData?.colors || [])
   const [dressStyle, setDressStyle] = useState(initialData?.dressStyle || '')
   const [brand, setBrand] = useState(initialData?.brand || '')
   const [features, setFeatures] = useState<Feature[]>(initialData?.features || [{ label: '', value: '' }])
+
+  const sizeOptions = [
+    { value: 'Small', label: 'Small' },
+    { value: 'Medium', label: 'Medium' },
+    { value: 'Large', label: 'Large' },
+    { value: 'XL', label: 'XL' },
+    { value: 'XXL', label: 'XXL' },
+  ];
+
+  const colorOptions = [
+    { value: 'bg-red-600', label: 'Red' },
+    { value: 'bg-blue-600', label: 'Blue' },
+    { value: 'bg-green-600', label: 'Green' },
+    { value: 'bg-yellow-300', label: 'Yellow' },
+    { value: 'bg-black', label: 'Black' },
+    { value: 'bg-silver', label: 'White' },
+  ];
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -63,8 +162,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
   const removeFeature = (idx: number) => setFeatures(prev => prev.length > 1 ? prev.filter((_, i) => i !== idx) : prev)
 
   const inputClass = 'rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-black/20 bg-white input-class'
-
-  
 
   return (
     <form className="space-y-5">
@@ -142,35 +239,24 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
       </div>
       <div className="flex gap-3">
         <div className="flex-1">
-          <label className="block text-sm font-medium mb-1">Size</label>
-          <select
-            value={sizes}
-            onChange={e => setSizes(e.target.value)}
-            className={inputClass}
-          >
-            <option value="">Select a size</option>
-            <option value="Small">Small</option>
-            <option value="Medium">Medium</option>
-            <option value="Large">Large</option>
-            <option value="XL">XL</option>
-            <option value="XXL">XXL</option>
-          </select>
+          <label className="block text-sm font-medium mb-1">Sizes</label>
+          <MultiSelectDropdown
+            options={sizeOptions}
+            selectedValues={sizes}
+            onChange={setSizes}
+            placeholder="Select sizes"
+            label="size"
+          />
         </div>
         <div className="flex-1">
-          <label className="block text-sm font-medium mb-1">Color</label>
-          <select
-            value={colors}
-            onChange={e => setColors(e.target.value)}
-            className={inputClass}
-          >
-            <option value="">Select a color</option>
-            <option value="bg-red-600">Red</option>
-            <option value="bg-blue-600">Blue</option>
-            <option value="bg-green-600">Green</option>
-            <option value="bg-yellow-400">Yellow</option>
-            <option value="bg-black">Black</option>
-            <option value="bg-white">White</option>
-          </select>
+          <label className="block text-sm font-medium mb-1">Colors</label>
+          <MultiSelectDropdown
+            options={colorOptions}
+            selectedValues={colors}
+            onChange={setColors}
+            placeholder="Select colors"
+            label="color"
+          />
         </div>
         <div className="flex-1">
           <label className="block text-sm font-medium mb-1">Brand</label>
@@ -241,8 +327,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
             price, 
             discount, 
             category, 
-            sizes: [sizes], // Convert to array
-            colors: [colors], // Convert to array
+            sizes, // Now already an array
+            colors, // Now already an array
             dressStyle, 
             brand, 
             features 
