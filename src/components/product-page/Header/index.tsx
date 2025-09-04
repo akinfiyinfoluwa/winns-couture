@@ -41,22 +41,22 @@ const Header = ({ data }: { data: Product }) => {
           <div className="flex items-center space-x-2.5 sm:space-x-3 mb-5">
             {data.discount > 0 ? (
               <span className="font-bold text-black text-2xl sm:text-[32px]">
-                {`$${Math.round(
+                {`₦${Math.round(
                   data.price - (data.price * data.discount) / 100
                 )}`}
               </span>
             ) : data.discount > 0 ? (
               <span className="font-bold text-black text-2xl sm:text-[32px]">
-                {`$${data.price - data.discount}`}
+                {`₦${data.price - data.discount}`}
               </span>
             ) : (
               <span className="font-bold text-black text-2xl sm:text-[32px]">
-                ${data.price}
+                ₦{data.price}
               </span>
             )}
             {data.discount > 0 && (
               <span className="font-bold text-black/40 line-through text-2xl sm:text-[32px]">
-                ${data.price}
+                ₦{data.price}
               </span>
             )}
           
@@ -67,7 +67,7 @@ const Header = ({ data }: { data: Product }) => {
             ) : (
               data.discount > 0 && (
                 <span className="font-medium text-[10px] sm:text-xs py-1.5 px-3.5 rounded-full bg-[#FF3333]/10 text-[#FF3333]">
-                  {`-$${data.discount}`}
+                  {`-₦${data.discount}`}
                 </span>
               )
             )}

@@ -6,21 +6,21 @@ export const StatCards = () => {
     <>
       <Card
         title="Gross Revenue"
-        value="$120,054.24"
+        value="₦120,054.24"
         pillText="2.75%"
         trend="up"
         period="From Jan 1st - Jul 31st"
       />
       <Card
         title="Avg Order"
-        value="$27.97"
+        value="₦27.97"
         pillText="1.01%"
         trend="down"
         period="From Jan 1st - Jul 31st"
       />
       <Card
         title="Trailing Year"
-        value="$278,054.24"
+        value="₦278,054.24"
         pillText="60.75%"
         trend="up"
         period="Previous 365 days"

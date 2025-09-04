@@ -20,42 +20,42 @@ export const RecentTransactions = () => {
             cusId="#48149"
             sku="Pro 1 Month"
             date="Aug 2nd"
-            price="$9.75"
+            price="₦9.75"
             order={1}
           />
           <TableRow
             cusId="#1942s"
             sku="Pro 3 Month"
             date="Aug 2nd"
-            price="$21.25"
+            price="₦21.25"
             order={2}
           />
           <TableRow
             cusId="#4192"
             sku="Pro 1 Year"
             date="Aug 1st"
-            price="$94.75"
+            price="₦94.75"
             order={3}
           />
           <TableRow
             cusId="#99481"
             sku="Pro 1 Month"
             date="Aug 1st"
-            price="$9.44"
+            price="₦9.44"
             order={4}
           />
           <TableRow
             cusId="#1304"
             sku="Pro 1 Month"
             date="Aug 1st"
-            price="$9.23"
+            price="₦9.23"
             order={5}
           />
           <TableRow
             cusId="#1304"
             sku="Pro 3 Month"
             date="Jul 31st"
-            price="$22.02"
+            price="₦22.02"
             order={6}
           />
         </tbody>

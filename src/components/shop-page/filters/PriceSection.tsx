@@ -38,7 +38,7 @@ const PriceSection: React.FC<PriceSectionProps> = ({ onChange }) => {
             min={0}
             max={250}
             step={1}
-            label="$"
+            label="₦"
           />
           <div className="mb-3" />
         </AccordionContent>
