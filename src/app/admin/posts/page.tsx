@@ -78,6 +78,7 @@ function Page(props: Props) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [postToDelete, setPostToDelete] = useState<Post | null>(null)
     const [editingPost, setEditingPost] = useState<Post | null>(null)
+    const [isSaving, setIsSaving] = useState(false)
 
     const handleDeleteClick = (post: Post) => {
         setPostToDelete(post)
@@ -120,6 +121,7 @@ function Page(props: Props) {
                       setEditingPost(null)
                     }}
                     onSave={async (formData) => {
+                      setIsSaving(true);
                       const url = editingPost ? "/api/posts/edit" : "/api/posts/create";
                       if (editingPost) {
                         formData.append("id", editingPost.id);
@@ -143,7 +145,9 @@ function Page(props: Props) {
                       }
                       setOpen(false)
                       setEditingPost(null)
+                      setIsSaving(false);
                     }}
+                    loading={isSaving}
                     initialData={editingPost ? {
                       ...editingPost,
                       name: editingPost.title,

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import InputGroup from '@/components/ui/input-group';
 
@@ -7,12 +7,13 @@ interface ProductFormProps {
   onCancel: () => void;
   onSave: (data: FormData) => void;
   initialData?: any;
+  loading?: boolean;
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData }) => {
-  const [file, setFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image || null);
-  const [product, setProduct] = useState({
+const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData, loading }) => {
+  const [file, setFile] = React.useState<File | null>(null);
+  const [imagePreview, setImagePreview] = React.useState<string | null>(initialData?.image || null);
+  const [product, setProduct] = React.useState({
     name: initialData?.name || "Test Product",
     description: initialData?.description || "This is a test product.",
     price: initialData?.price || "99.99",
@@ -22,7 +23,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
     published: initialData?.published?.toString() || "true",
   });
 
-  const [features, setFeatures] = useState<Array<{ label: string; value: string }>>(initialData?.features || [{ label: "", value: "" }]);
+  const [features, setFeatures] = React.useState<Array<{ label: string; value: string }>>(initialData?.features || [{ label: "", value: "" }]);
 
   React.useEffect(() => {
     if (initialData) {
@@ -194,8 +195,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
           <Button type="button" variant="secondary" onClick={onCancel} className="w-full sm:w-auto order-2 sm:order-1">
             Cancel
           </Button>
-          <Button type="submit" className="w-full sm:w-auto order-1 sm:order-2">
-            Save
+          <Button type="submit" className="w-full sm:w-auto order-1 sm:order-2" disabled={loading}>
+            {loading ? 'Saving...' : 'Save'}
           </Button>
         </div>
       </form>
