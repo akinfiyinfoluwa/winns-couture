@@ -42,9 +42,12 @@ export default function HomePage() {
     dressStyles: [],
     priceRange: [0, 1000],
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 9; // You can adjust this number
 
   const handleFilterChange = (callback: (prev: FiltersState) => FiltersState) => {
     setFilters(callback);
+    setCurrentPage(1); // Reset to first page on filter change
   };
 
   const filteredProducts = allProducts.filter((product: Product) => {
@@ -66,6 +69,22 @@ export default function HomePage() {
     }
     return true;
   });
+
+  // Pagination calculations
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const handlePrevious = () => {
+    setCurrentPage(prev => Math.max(1, prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentPage(prev => Math.min(totalPages, prev + 1));
+  };
 
   return (
     <>
@@ -90,7 +109,9 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col sm:items-center sm:flex-row">
                 <span className="text-sm md:text-base text-black/60 mr-3">
-                  Showing 1-10 of {filteredProducts.length} Products
+                  Showing {indexOfFirstProduct + 1}-{
+                    Math.min(indexOfLastProduct, filteredProducts.length)
+                  } of {filteredProducts.length} Products
                 </span>
                 <div className="flex items-center">
                   Sort by:{" "}
@@ -108,69 +129,41 @@ export default function HomePage() {
               </div>
             </div>
             <div className="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
-              {filteredProducts.map((product: Product) => (
+              {currentProducts.map((product: Product) => (
                 <ProductCard key={product.id} data={product} />
               ))}
             </div>
             <hr className="border-t-black/10" />
             <Pagination className="justify-between">
-              <PaginationPrevious href="#" className="border border-black/10" />
+              <PaginationPrevious
+                href="#"
+                onClick={handlePrevious}
+                className="border border-black/10"
+                aria-disabled={currentPage === 1}
+                tabIndex={currentPage === 1 ? -1 : undefined}
+              />
               <PaginationContent>
-                <PaginationItem>
-                  <PaginationLink
-                    href="#"
-                    className="text-black/50 font-medium text-sm"
-                    isActive
-                  >
-                    1
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink
-                    href="#"
-                    className="text-black/50 font-medium text-sm"
-                  >
-                    2
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem className="hidden lg:block">
-                  <PaginationLink
-                    href="#"
-                    className="text-black/50 font-medium text-sm"
-                  >
-                    3
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis className="text-black/50 font-medium text-sm" />
-                </PaginationItem>
-                <PaginationItem className="hidden lg:block">
-                  <PaginationLink
-                    href="#"
-                    className="text-black/50 font-medium text-sm"
-                  >
-                    8
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem className="hidden sm:block">
-                  <PaginationLink
-                    href="#"
-                    className="text-black/50 font-medium text-sm"
-                  >
-                    9
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink
-                    href="#"
-                    className="text-black/50 font-medium text-sm"
-                  >
-                    10
-                  </PaginationLink>
-                </PaginationItem>
+                {[...Array(totalPages)].map((_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      href="#"
+                      onClick={() => paginate(i + 1)}
+                      className="text-black/50 font-medium text-sm"
+                      isActive={i + 1 === currentPage}
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
               </PaginationContent>
 
-              <PaginationNext href="#" className="border border-black/10" />
+              <PaginationNext
+                href="#"
+                onClick={handleNext}
+                className="border border-black/10"
+                aria-disabled={currentPage === totalPages}
+                tabIndex={currentPage === totalPages ? -1 : undefined}
+              />
             </Pagination>
           </div>
         </div>
