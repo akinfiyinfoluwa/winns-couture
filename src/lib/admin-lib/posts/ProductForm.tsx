@@ -1,67 +1,73 @@
-import React, { useState, useRef, useEffect } from 'react'
-import InputGroup from '@/components/ui/input-group'
-import { Button } from '@/components/ui/button'
-import MultiSelectDropdown from './MultiSelect';
-import { colorOptions } from './dataTemplate';
-
-interface Feature {
-  label: string;
-  value: string;
-}
-
-interface Discount {
-  amount: string;
-  percentage: string;
-}
+"use client"
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import InputGroup from '@/components/ui/input-group';
 
 interface ProductFormProps {
   onCancel: () => void;
-  onSave: (data: any) => void;
-  initialData?: {
-    title?: string;
-    image?: string;
-    price?: string;
-    description?: string; 
-    discount?: Discount;
-    category?: string;
-    sizes?: string[];
-    colors?: string[];
-    dressStyle?: string;
-    brand?: string;
-    features?: Feature[];
-    published: boolean;
-  };
+  onSave: (data: FormData) => void;
+  initialData?: any;
 }
 
-
-
 const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData }) => {
-  const [title, setTitle] = useState(initialData?.title || '')
-  const [description, setDescription] = useState(initialData?.description || '')
-  const [image, setImage] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image || null)
-  const [price, setPrice] = useState(initialData?.price || '')
-  const [discount, setDiscount] = useState<Discount>(initialData?.discount || { amount: '', percentage: '' })
-  const [category, setCategory] = useState(initialData?.category || '')
-  const [sizes, setSizes] = useState<string[]>(initialData?.sizes || [])
-  const [colors, setColors] = useState<string[]>(initialData?.colors || [])
-  const [dressStyle, setDressStyle] = useState(initialData?.dressStyle || '')
-  const [brand, setBrand] = useState(initialData?.brand || '')
-  const [published, setPublished] = useState()
-  const [features, setFeatures] = useState<Feature[]>(initialData?.features || [{ label: '', value: '' }])
+  const [file, setFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image || null);
+  const [product, setProduct] = useState({
+    name: initialData?.name || "Test Product",
+    description: initialData?.description || "This is a test product.",
+    price: initialData?.price || "99.99",
+    discount: initialData?.discount || "10",
+    category: initialData?.category || "Test",
+    brand: initialData?.brand || "Tester",
+    published: initialData?.published?.toString() || "true",
+  });
 
+  const [features, setFeatures] = useState<Array<{ label: string; value: string }>>(initialData?.features || [{ label: "", value: "" }]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    setImage(file || null)
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => setImagePreview(reader.result as string)
-      reader.readAsDataURL(file)
+  React.useEffect(() => {
+    if (initialData) {
+      setProduct({
+        name: initialData.name || "",
+        description: initialData.description || "",
+        price: initialData.price || "",
+        discount: initialData.discount || "",
+        category: initialData.category || "",
+        brand: initialData.brand || "",
+        published: initialData.published?.toString() || "false",
+      });
+      setFeatures(initialData.features || [{ label: "", value: "" }])
+      setImagePreview(initialData.image || null);
     } else {
-      setImagePreview(null)
+      setProduct({
+        name: "Test Product",
+        description: "This is a test product.",
+        price: "99.99",
+        discount: "10",
+        category: "Test",
+        brand: "Tester",
+        published: "true",
+      });
+      setFeatures([{ label: "", value: "" }])
+      setImagePreview(null);
     }
-  }
+  }, [initialData]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setProduct(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleFeatureChange = (idx: number, field: 'label' | 'value', val: string) => {
     setFeatures(prev => prev.map((f, i) => i === idx ? { ...f, [field]: val } : f))
@@ -69,129 +75,63 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
   const addFeature = () => setFeatures(prev => [...prev, { label: '', value: '' }])
   const removeFeature = (idx: number) => setFeatures(prev => prev.length > 1 ? prev.filter((_, i) => i !== idx) : prev)
 
-  const inputClass = 'rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-black/20 bg-white input-class text-sm sm:text-base'
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
+    if (file) {
+      formData.append("file", file);
+    }
+    Object.entries(product).forEach(([key, value]) => {
+      if (key !== 'features') {
+        formData.append(key, value);
+      }
+    });
+    formData.append('features', JSON.stringify(features));
+    onSave(formData);
+  };
+
+  const inputClass = 'rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-black/20 bg-white input-class text-sm sm:text-base';
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6">
-      <form className="space-y-4 sm:space-y-6">
-        {/* Title */}
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         <div>
-          <label className="block text-sm font-medium mb-1 sm:mb-2">Title</label>
-          <InputGroup.Input
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            placeholder="Enter product title"
-            className={inputClass}
-          />
+          <label className="block text-sm font-medium mb-1 sm:mb-2">Name</label>
+          <InputGroup.Input type="text" name="name" value={product.name} onChange={handleInputChange} className={inputClass} required />
         </div>
-
-        {/* Description */}
         <div>
           <label className="block text-sm font-medium mb-1 sm:mb-2">Description</label>
-          <InputGroup.Input
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            placeholder="Ex: this product is made for indian bosschicks"
-            className={`${inputClass} p-3 sm:p-5`}
-          />
+          <textarea name="description" value={product.description} onChange={handleInputChange} className={`${inputClass} p-3 sm:p-5`} />
         </div>
-
-        {/* Price and Discount - Responsive Layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-medium mb-1 sm:mb-2">Price</label>
-            <InputGroup.Input
-              type="number"
-              value={price}
-              onChange={e => setPrice(e.target.value)}
-              placeholder="100"
-              min={0}
-              className={inputClass}
-            />
+            <InputGroup.Input type="text" name="price" value={product.price} onChange={handleInputChange} className={inputClass} required />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1 sm:mb-2">Discount %</label>
-            <InputGroup.Input
-              type="number"
-              value={discount.percentage}
-              onChange={e => setDiscount(d => ({ ...d, percentage: e.target.value }))}
-              placeholder="10"
-              min={0}
-              max={100}
-              className={inputClass}
-            />
+            <label className="block text-sm font-medium mb-1 sm:mb-2">Discount (%)</label>
+            <InputGroup.Input type="number" name="discount" value={product.discount} onChange={handleInputChange} className={inputClass} />
           </div>
         </div>
-
-        {/* Image */}
         <div>
           <label className="block text-sm font-medium mb-1 sm:mb-2">Image</label>
-          <InputGroup.Input 
-            type="file" 
-            accept="image/*" 
-            onChange={handleImageChange} 
-            className={inputClass} 
-          />
+          <InputGroup.Input type="file" accept="image/*" onChange={handleFileChange} className={inputClass} />
           {imagePreview && (
             <div className="mt-2 flex justify-center sm:justify-start">
-              <img 
-                src={imagePreview} 
-                alt="Preview" 
-                className="rounded w-24 h-24 sm:w-32 sm:h-32 object-cover border" 
-              />
+              <img src={imagePreview} alt="Preview" className="rounded w-24 h-24 sm:w-32 sm:h-32 object-cover border" />
             </div>
           )}
         </div>
-
-        {/* Category and Dress Style - Responsive Layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-medium mb-1 sm:mb-2">Category</label>
-            <InputGroup.Input
-              value={category}
-              onChange={e => setCategory(e.target.value)}
-              placeholder="T-shirts"
-              className={inputClass}
-            />
+            <InputGroup.Input type="text" name="category" value={product.category} onChange={handleInputChange} className={inputClass} />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1 sm:mb-2">Dress Style</label>
-            <InputGroup.Input
-              value={dressStyle}
-              onChange={e => setDressStyle(e.target.value)}
-              placeholder="Casual"
-              className={inputClass}
-            />
-          </div>
-        </div>
-
-        {/* Sizes, Colors, and Brand - Responsive Layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1 sm:mb-2">Colors</label>
-            <MultiSelectDropdown
-              options={colorOptions}
-              selectedValues={colors}
-              onChange={setColors}
-              placeholder="Select colors"
-              label="color"
-            />
-          </div>
-          <div className="sm:col-span-2 lg:col-span-1">
             <label className="block text-sm font-medium mb-1 sm:mb-2">Brand</label>
-            <select
-              value={brand}
-              onChange={e => setBrand(e.target.value)}
-              className={inputClass}
-            >
-              <option value="">Select a brand</option>
-              <option value="mystyle-express">MyStyle Express</option>
-              <option value="gucci">The WinifredAkin RTW</option>
-            </select>
+            <InputGroup.Input type="text" name="brand" value={product.brand} onChange={handleInputChange} className={inputClass} />
           </div>
         </div>
-
-        {/* Product Specifications */}
         <div>
           <label className="block text-sm font-medium mb-2 sm:mb-3">Product Specification</label>
           <div className="space-y-3 sm:space-y-4">
@@ -243,41 +183,24 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
             </div>
           </div>
         </div>
-
-        {/* Action Buttons */}
+        <div>
+          <label className="block text-sm font-medium mb-1 sm:mb-2">Published</label>
+          <select name="published" value={product.published} onChange={handleInputChange} className={inputClass}>
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
+        </div>
         <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-6 pt-4 border-t">
-          <Button 
-            type="button" 
-            variant="secondary" 
-            onClick={onCancel}
-            className="w-full sm:w-auto order-2 sm:order-1"
-          >
+          <Button type="button" variant="secondary" onClick={onCancel} className="w-full sm:w-auto order-2 sm:order-1">
             Cancel
           </Button>
-          <Button 
-            type="button" 
-            onClick={() => onSave({ 
-              title, 
-              description,
-              image: image || imagePreview,
-              price, 
-              discount, 
-              category, 
-              sizes,
-              colors,
-              dressStyle, 
-              brand, 
-              features,
-              published
-            })}
-            className="w-full sm:w-auto order-1 sm:order-2"
-          >
+          <Button type="submit" className="w-full sm:w-auto order-1 sm:order-2">
             Save
           </Button>
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default ProductForm
+export default ProductForm;

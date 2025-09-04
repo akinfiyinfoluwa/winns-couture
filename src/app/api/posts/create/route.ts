@@ -24,7 +24,17 @@ export async function POST(req: Request) {
       );
     }
 
-    let imageUrl = null;
+    const productData: any = {
+      name,
+      description,
+      discount: discount ? parseInt(discount) : null,
+      price: parseFloat(price),
+      category,
+      brand,
+      features: features ? JSON.parse(features) : null,
+      published: published === 'true',
+    };
+
     if (file) {
       const fileBuffer = Buffer.from(await file.arrayBuffer());
       const fileName = `${Date.now()}-${file.name}`;
@@ -43,20 +53,8 @@ export async function POST(req: Request) {
         .from("images")
         .getPublicUrl(fileName);
 
-      imageUrl = publicUrlData.publicUrl;
+      productData.image = publicUrlData.publicUrl;
     }
-
-    const productData = {
-      name,
-      image: imageUrl,
-      description,
-      discount: discount ? parseInt(discount) : null,
-      price: parseFloat(price),
-      category,
-      brand,
-      features: features ? JSON.parse(features) : null,
-      published: published === 'true',
-    };
 
     const { data, error } = await supabase
       .from("products")

@@ -27,6 +27,7 @@ interface Post {
   price: string;
   srcUrl: string;
   published: boolean;
+  features: Array<{ label: string; value: string }>;
 }
 
 // Sample data - in a real app this would come from an API/database
@@ -39,7 +40,8 @@ const samplePosts: Post[] = [
     date: '2025-08-01',
     price: '200000',
     srcUrl: '/images/pic1.png',
-    published: true
+    published: true,
+    features: [{ label: "Material", value: "Cotton" }]
   },
   {
     id: '2',
@@ -49,7 +51,8 @@ const samplePosts: Post[] = [
     date: '2025-08-15',
     price: '200000',
     srcUrl: '/images/pic2.png',
-    published: true
+    published: true,
+    features: [{ label: "Style", value: "Casual" }]
 
   },
   {
@@ -60,7 +63,8 @@ const samplePosts: Post[] = [
     date: '2025-08-20',
     price: '200000',
     srcUrl: '/images/pic3.png',
-    published: true
+    published: true,
+    features: [{ label: "Sustainability", value: "Recycled Materials" }]
 
   }
 ]
@@ -97,7 +101,7 @@ function Page(props: Props) {
             <h1 className="text-2xl font-bold">Posts</h1>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
-                <Button className="flex items-center gap-2" onClick={() => setOpen(true)}>
+                <Button className="flex items-center gap-2" onClick={() => { setEditingPost(null); setOpen(true); }}>
                   <FiPlus className="w-4 h-4" />
                   New Post
                 </Button>
@@ -115,42 +119,35 @@ function Page(props: Props) {
                       setOpen(false)
                       setEditingPost(null)
                     }}
-                    onSave={data => {
+                    onSave={async (formData) => {
+                      const url = editingPost ? "/api/posts/edit" : "/api/posts/create";
                       if (editingPost) {
-                        // Update existing post
-                        setPosts(prev => prev.map(post => 
-                          post.id === editingPost.id 
-                            ? {
-                                ...post,
-                                title: data.title,
-                                category: data.category,
-                                srcUrl: data.image instanceof File ? URL.createObjectURL(data.image) : data.image
-                              }
-                            : post
-                        ))
-                        toast.success('Product updated successfully!')
+                        formData.append("id", editingPost.id);
+                      }
+                      const res = await fetch(url, {
+                        method: "POST",
+                        body: formData,
+                      });
+                      const result = await res.json();
+                      const data = result.data[0]
+                      if (res.ok) {
+                        if (editingPost) {
+                          toast.success('Product updated successfully!');
+                          setPosts(prev => prev.map(p => p.id === editingPost.id ? { ...p, ...data, title: data.name, date: new Date().toISOString().split('T')[0], status: data.published ? 'published' : 'draft', srcUrl: data.image, price: data.price.toString()} : p));
+                        } else {
+                          toast.success('Product created successfully!');
+                          setPosts(prev => [ ...prev, { ...data, title: data.name, date: new Date().toISOString().split('T')[0], status: data.published ? 'published' : 'draft', srcUrl: data.image, price: data.price.toString()}]);
+                        }
                       } else {
-                        // Add new post
-                        setPosts(prev => [{
-                          id: (prev.length + 1).toString(),
-                          title: data.title,
-                          status: 'draft',
-                          category: data.category,
-                          date: new Date().toISOString().split('T')[0],
-                          price: data.price,
-                          srcUrl: data.image instanceof File ? URL.createObjectURL(data.image) : '/images/pic1.png',
-                          published: data.published
-                        }, ...prev])
-                        toast.success('Product created successfully!')
+                        toast.error(data.error || 'Something went wrong!');
                       }
                       setOpen(false)
                       setEditingPost(null)
                     }}
                     initialData={editingPost ? {
-                      title: editingPost.title,
-                      category: editingPost.category,
+                      ...editingPost,
+                      name: editingPost.title,
                       image: editingPost.srcUrl,
-                      published: editingPost.published
                     } : undefined}
                   />
                 </div>
