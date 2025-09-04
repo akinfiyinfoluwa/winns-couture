@@ -14,12 +14,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
   const [file, setFile] = React.useState<File | null>(null);
   const [imagePreview, setImagePreview] = React.useState<string | null>(initialData?.image || null);
   const [product, setProduct] = React.useState({
-    name: initialData?.name || "Test Product",
-    description: initialData?.description || "This is a test product.",
-    price: initialData?.price || "99.99",
-    discount: initialData?.discount || "10",
-    category: initialData?.category || "Test",
-    brand: initialData?.brand || "Tester",
+    name: initialData?.name || "",
+    description: initialData?.description || "",
+    price: initialData?.price || "",
+    discount: initialData?.discount || "",
+    category: initialData?.category || "",
+    brand: initialData?.brand || "",
     published: initialData?.published?.toString() || "true",
   });
 
@@ -40,12 +40,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
       setImagePreview(initialData.image || null);
     } else {
       setProduct({
-        name: "Test Product",
-        description: "This is a test product.",
-        price: "99.99",
-        discount: "10",
-        category: "Test",
-        brand: "Tester",
+        name: "",
+        description: "",
+        price: "",
+        discount: "",
+        category: "",
+        brand: "",
         published: "true",
       });
       setFeatures([{ label: "", value: "" }])

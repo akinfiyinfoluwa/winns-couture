@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Sheet,
   SheetContent,
@@ -28,67 +28,60 @@ interface Post {
   srcUrl: string;
   published: boolean;
   features: Array<{ label: string; value: string }>;
+  name: string;
+  image: string;
 }
-
-// Sample data - in a real app this would come from an API/database
-const samplePosts: Post[] = [
-  {
-    id: '1',
-    title: 'New Summer Collection 2025',
-    status: 'published',
-    category: 'Fashion',
-    date: '2025-08-01',
-    price: '200000',
-    srcUrl: '/images/pic1.png',
-    published: true,
-    features: [{ label: "Material", value: "Cotton" }]
-  },
-  {
-    id: '2',
-    title: 'How to Style Winter Outfits',
-    status: 'draft',
-    category: 'Style Guide',
-    date: '2025-08-15',
-    price: '200000',
-    srcUrl: '/images/pic2.png',
-    published: true,
-    features: [{ label: "Style", value: "Casual" }]
-
-  },
-  {
-    id: '3',
-    title: 'Sustainable Fashion Tips',
-    status: 'published',
-    category: 'Sustainability',
-    date: '2025-08-20',
-    price: '200000',
-    srcUrl: '/images/pic3.png',
-    published: true,
-    features: [{ label: "Sustainability", value: "Recycled Materials" }]
-
-  }
-]
 
 interface Props {}
 
 function Page(props: Props) {
     const {} = props
     const [open, setOpen] = useState(false)
-    const [posts, setPosts] = useState<Post[]>(samplePosts)
+    const [posts, setPosts] = useState<Post[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [postToDelete, setPostToDelete] = useState<Post | null>(null)
     const [editingPost, setEditingPost] = useState<Post | null>(null)
     const [isSaving, setIsSaving] = useState(false)
+
+    useEffect(() => {
+        fetchPosts();
+    }, []);
+
+    const fetchPosts = async () => {
+        const res = await fetch("/api/posts/fetch");
+        const result = await res.json();
+        if (res.ok) {
+            const fetchedPosts = result.data.map((post: any) => ({
+                ...post,
+                title: post.name,
+                date: new Date(post.created_at).toISOString().split('T')[0],
+                status: post.published ? 'published' : 'draft',
+                srcUrl: post.image,
+                price: post.price.toString(),
+            }));
+            setPosts(fetchedPosts);
+        } else {
+            toast.error(result.error || 'Something went wrong!');
+        }
+    };
 
     const handleDeleteClick = (post: Post) => {
         setPostToDelete(post)
         setIsModalOpen(true)
     }
 
-    const handleConfirmDelete = () => {
+    const handleConfirmDelete = async () => {
         if (postToDelete) {
-            setPosts(posts.filter(p => p.id !== postToDelete.id))
-            toast.success(`Post "${postToDelete.title}" deleted successfully!`)
+            const res = await fetch(`/api/posts/delete?id=${postToDelete.id}`, {
+                method: 'DELETE',
+            });
+            if (res.ok) {
+                setPosts(posts.filter(p => p.id !== postToDelete.id))
+                toast.success(`Post "${postToDelete.title}" deleted successfully!`)
+            } else {
+                const result = await res.json();
+                toast.error(result.error || 'Something went wrong!');
+            }
             setIsModalOpen(false)
             setPostToDelete(null)
         }
