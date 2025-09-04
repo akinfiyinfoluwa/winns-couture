@@ -27,7 +27,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-200">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg border border-gray-100 animate-fade-in">
+      <div className="w-full max-w-md p-8 space-y-6 rounded-2xl border border-gray-100 animate-fade-in">
         <h1 className="text-3xl font-extrabold text-center text-gray-800">
           Admin Login
         </h1>
@@ -74,7 +74,7 @@ export default function LoginPage() {
           <div>
             <button
               type="submit"
-              className="w-full px-4 py-2 font-semibold text-white bg-indigo-500 rounded-lg shadow-sm hover:bg-indigo-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-1 transition-all duration-200"
+              className="w-full px-4 py-2 font-semibold text-white bg-purple-500 rounded-lg shadow-sm hover:bg-purple-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-1 transition-all duration-200"
             >
               Sign In
             </button>

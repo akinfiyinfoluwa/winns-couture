@@ -1,16 +1,17 @@
-"use client";
-
 import type { Metadata, Viewport } from "next";
+import { Jost } from "next/font/google";
 import "@/styles/globals.css";
 
-import TopBanner from "@/components/layout/Banner/TopBanner";
-import TopNavbar from "@/components/layout/Navbar/TopNavbar";
-import Footer from "@/components/layout/Footer";
 import HolyLoader from "holy-loader";
 import Providers from "./providers";
-import { usePathname } from 'next/navigation';
+import AdminLayout from "./AdminLayout";
 
+const jost = Jost({ subsets: ["latin"] });
 
+export const metadata: Metadata = {
+  title: "Winn's Couture",
+  description: "An e-commerce app for a fashion brand.",
+};
 
 export const viewport: Viewport = {
   themeColor: "#000000",
@@ -21,19 +22,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const isAdminRoute = pathname?.startsWith('/admin');
-
   return (
     <html lang="en">
-      <body >
+      <body className={jost.className}>
         <HolyLoader color="#868686" />
-        {!isAdminRoute && <TopBanner />}
         <Providers>
-          {!isAdminRoute && <TopNavbar />}
-          {children}
+          <AdminLayout>{children}</AdminLayout>
         </Providers>
-        {!isAdminRoute && <Footer />}
       </body>
     </html>
   );
