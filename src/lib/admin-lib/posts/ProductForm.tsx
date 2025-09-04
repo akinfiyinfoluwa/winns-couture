@@ -3,6 +3,8 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import InputGroup from "@/components/ui/input-group";
 
+import imageCompression from "browser-image-compression";
+
 interface ProductFormProps {
   onCancel: () => void;
   onSave: (data: FormData) => void;
@@ -69,15 +71,39 @@ const ProductForm: React.FC<ProductFormProps> = ({
     }
   }, [product.name]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
-      setFile(selectedFile);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+
+      const options = {
+        maxSizeMB: 0.3, // (maxSizeMB * 1024 * 1024) bytes = 300KB
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
       };
-      reader.readAsDataURL(selectedFile);
+
+      try {
+        const compressedFile = await imageCompression(selectedFile, options);
+        console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`);
+
+        if (compressedFile.size > 300 * 1024) { // Check if still greater than 300KB
+          alert("Image size is still too large after compression. Please choose a smaller image.");
+          setFile(null);
+          setImagePreview(null);
+          return;
+        }
+
+        setFile(compressedFile);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result as string);
+        };
+        reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error("Error compressing image:", error);
+        alert("Error compressing image. Please try again.");
+        setFile(null);
+        setImagePreview(null);
+      }
     }
   };
 
@@ -197,7 +223,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
               accept="image/*"
               onChange={handleFileChange}
               className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
-              required
             />
             {imagePreview && (
               <div className="mt-4 flex justify-center sm:justify-start">

@@ -43,6 +43,7 @@ function Page(props: Props) {
   const [postToDelete, setPostToDelete] = useState<Post | null>(null);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchPosts();
@@ -73,6 +74,7 @@ function Page(props: Props) {
 
   const handleConfirmDelete = async () => {
     if (postToDelete) {
+      setIsDeleting(true);
       const res = await fetch(`/api/posts/delete?id=${postToDelete.id}`, {
         method: "DELETE"
       });
@@ -85,6 +87,7 @@ function Page(props: Props) {
       }
       setIsModalOpen(false);
       setPostToDelete(null);
+      setIsDeleting(false);
     }
   };
 
@@ -358,6 +361,7 @@ function Page(props: Props) {
         onConfirm={handleConfirmDelete}
         title="Delete Post"
         description="Are you sure you want to delete this post? This action cannot be undone."
+        loading={isDeleting}
       />
       <ToastContainer />
     </main>

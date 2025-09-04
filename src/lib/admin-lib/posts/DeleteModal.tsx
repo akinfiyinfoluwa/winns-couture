@@ -7,9 +7,10 @@ interface ConfirmModalProps {
   onConfirm: () => void
   title?: string
   description?: string
+  loading?: boolean
 }
 
-const DeleteModal: React.FC<ConfirmModalProps> = ({ open, onClose, onConfirm, title, description }) => {
+const DeleteModal: React.FC<ConfirmModalProps> = ({ open, onClose, onConfirm, title, description, loading }) => {
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/80 pointer-events-none">
@@ -17,8 +18,8 @@ const DeleteModal: React.FC<ConfirmModalProps> = ({ open, onClose, onConfirm, ti
         <h2 className="text-base font-semibold mb-1">{title || 'Are you sure?'}</h2>
         {description && <p className="mb-2 text-gray-600 text-xs">{description}</p>}
         <div className="flex justify-end gap-2 mt-2">
-          <Button variant="secondary" size="sm" onClick={onClose}>Cancel</Button>
-          <Button variant="destructive" size="sm" onClick={onConfirm}>Delete</Button>
+          <Button variant="secondary" size="sm" onClick={onClose} disabled={loading}>Cancel</Button>
+          <Button variant="destructive" size="sm" onClick={onConfirm} disabled={loading}>{loading ? 'Deleting...' : 'Delete'}</Button>
         </div>
       </div>
     </div>
