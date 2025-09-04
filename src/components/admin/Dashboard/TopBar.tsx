@@ -1,6 +1,7 @@
 import React from "react";
 import { FiCalendar } from "react-icons/fi";
 import {format} from 'date-fns'
+import { NotificationButton } from "./NotificationButton";
 
 export const TopBar = () => {
 
@@ -16,6 +17,7 @@ export const TopBar = () => {
            {formattedDate}
           </span>
         </div>
+          <NotificationButton />
 
         <button className="flex text-sm items-center gap-2 bg-stone-100 transition-colors hover:bg-violet-100 hover:text-violet-700 px-3 py-1.5 rounded">
           <FiCalendar />
