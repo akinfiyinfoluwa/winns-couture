@@ -4,9 +4,9 @@ import {
   KeyframeOptions,
   animate,
   useInView,
-  useIsomorphicLayoutEffect,
+  useIsomorphicLayoutEffect
 } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useCallback, useState } from "react";
 
 type AnimatedCounterProps = {
   from: number;
@@ -17,42 +17,70 @@ type AnimatedCounterProps = {
 const AnimatedCounter = ({
   from,
   to,
-  animationOptions,
+  animationOptions
 }: AnimatedCounterProps) => {
+  const [displayValue, setDisplayValue] = useState(from);
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
+  const animationRef = useRef<any>(null);
+
+  const updateValue = useCallback((value: number) => {
+    const formattedValue = Number(value.toFixed(0));
+    setDisplayValue(formattedValue);
+  }, []);
 
   useIsomorphicLayoutEffect(() => {
-    const element = ref.current;
-
-    if (!element) return;
     if (!inView) return;
 
-    // Set initial value
-    element.textContent = String(from);
+    // Cancel any existing animation
+    if (animationRef.current) {
+      try {
+        animationRef.current.stop();
+      } catch (error) {
+        // Silently handle any stop errors
+      }
+    }
 
-    // If reduced motion is enabled in system's preferences
-    if (window.matchMedia("(prefers-reduced-motion)").matches) {
-      element.textContent = String(to);
+    // Set initial value
+    setDisplayValue(from);
+
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion)")
+      .matches;
+
+    if (prefersReducedMotion) {
+      setDisplayValue(to);
       return;
     }
 
-    const controls = animate(from, to, {
-      duration: 6,
-      ease: "easeOut",
-      ...animationOptions,
-      onUpdate(value) {
-        element.textContent = Number(value.toFixed(0)).toLocaleString();
-      },
-    });
+    // Start animation
+    try {
+      animationRef.current = animate(from, to, {
+        duration: 6,
+        ease: "easeOut",
+        ...animationOptions,
+        onUpdate: updateValue
+      });
+    } catch (error) {
+      // Fallback to final value if animation fails
+      console.warn("Animation failed, showing final value:", error);
+      setDisplayValue(to);
+    }
 
-    // Cancel on unmount
+    // Cleanup function
     return () => {
-      controls.stop();
+      if (animationRef.current) {
+        try {
+          animationRef.current.stop();
+        } catch (error) {
+          // Silently handle cleanup errors
+        }
+        animationRef.current = null;
+      }
     };
-  }, [ref, inView, from, to]);
+  }, [inView, from, to, animationOptions, updateValue]);
 
-  return <span ref={ref} />;
+  return <span ref={ref}>{displayValue.toLocaleString()}</span>;
 };
 
 export default AnimatedCounter;
