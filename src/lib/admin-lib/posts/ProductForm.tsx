@@ -30,7 +30,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
     slug: initialData?.slug || ""
   });
 
-
   React.useEffect(() => {
     if (initialData) {
       setProduct({
@@ -56,6 +55,19 @@ const ProductForm: React.FC<ProductFormProps> = ({
       setImagePreview(null);
     }
   }, [initialData]);
+
+  React.useEffect(() => {
+    if (product.name) {
+      const generatedSlug = product.name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "") // Remove non-alphanumeric characters except spaces and hyphens
+        .trim() // Trim leading/trailing whitespace
+        .replace(/\s+/g, "-"); // Replace spaces with hyphens
+      setProduct(prev => ({ ...prev, slug: generatedSlug }));
+    } else {
+      setProduct(prev => ({ ...prev, slug: "" }));
+    }
+  }, [product.name]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -90,17 +102,12 @@ const ProductForm: React.FC<ProductFormProps> = ({
       formData.append("file", file);
     }
 
-    let slug = product.slug;
-    if (!slug) {
-      slug = product.name.toLowerCase().replace(/\s+/g, "-");
-    }
-
     Object.entries(product).forEach(([key, value]) => {
       if (key !== "features") {
         formData.append(key, value);
       }
     });
-    formData.set("slug", slug);
+    formData.set("slug", product.slug);
     onSave(formData);
   };
 
@@ -120,6 +127,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
             value={product.name}
             onChange={handleInputChange}
             className={inputClass}
+            placeholder="Enter product name"
             required
           />
         </div>
@@ -133,6 +141,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
             value={product.slug}
             onChange={handleInputChange}
             className={inputClass}
+            placeholder="Auto-generated from name"
+            readOnly
           />
         </div>
         <div>
@@ -144,6 +154,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
             value={product.description}
             onChange={handleInputChange}
             className={`${inputClass} p-4 min-h-[120px] resize-y`}
+            placeholder="Enter product description"
             required
           />
         </div>
@@ -158,6 +169,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
               value={product.price}
               onChange={handleInputChange}
               className={inputClass}
+              placeholder="Enter price"
               required
             />
           </div>
@@ -171,6 +183,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
               value={product.discount}
               onChange={handleInputChange}
               className={inputClass}
+              placeholder="Enter discount percentage"
             />
           </div>
         </div>
