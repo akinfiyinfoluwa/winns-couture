@@ -25,14 +25,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
     description: initialData?.description || "",
     price: initialData?.price || "",
     discount: initialData?.discount || "",
-    category: initialData?.category || "",
     brand: initialData?.brand || "The Winifred Akin RTW",
     published: initialData?.published?.toString() || "true"
   });
 
-  const [features, setFeatures] = React.useState<
-    Array<{ label: string; value: string }>
-  >(initialData?.features || [{ label: "", value: "" }]);
 
   React.useEffect(() => {
     if (initialData) {
@@ -41,11 +37,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
         description: initialData.description || "",
         price: initialData.price || "",
         discount: initialData.discount || "",
-        category: initialData.category || "",
         brand: initialData.brand || "The Winifred Akin RTW",
         published: initialData.published?.toString() || "false"
       });
-      setFeatures(initialData.features || [{ label: "", value: "" }]);
       setImagePreview(initialData.image || null);
     } else {
       setProduct({
@@ -53,11 +47,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
         description: "",
         price: "",
         discount: "",
-        category: "",
         brand: "The Winifred Akin RTW",
         published: "true"
       });
-      setFeatures([{ label: "", value: "" }]);
       setImagePreview(null);
     }
   }, [initialData]);
@@ -83,21 +75,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
     setProduct(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFeatureChange = (
-    idx: number,
-    field: "label" | "value",
-    val: string
-  ) => {
-    setFeatures(prev =>
-      prev.map((f, i) => (i === idx ? { ...f, [field]: val } : f))
-    );
-  };
-  const addFeature = () =>
-    setFeatures(prev => [...prev, { label: "", value: "" }]);
-  const removeFeature = (idx: number) =>
-    setFeatures(prev =>
-      prev.length > 1 ? prev.filter((_, i) => i !== idx) : prev
-    );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,7 +91,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
         formData.append(key, value);
       }
     });
-    formData.append("features", JSON.stringify(features));
     onSave(formData);
   };
 
@@ -202,20 +178,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Category
-            </label>
-            <InputGroup.Input
-              type="text"
-              name="category"
-              value={product.category}
-              onChange={handleInputChange}
-              className={inputClass}
-              placeholder="Causual"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
               Brand
             </label>
             <select
@@ -232,60 +194,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
           </div>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
-            Product Specification
-          </label>
-          <div className="space-y-3 sm:space-y-4">
-            {features.map((feature, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 p-3 rounded-lg bg-gray-50/50"
-              >
-                <InputGroup.Input
-                  value={feature.label}
-                  onChange={e =>
-                    handleFeatureChange(idx, "label", e.target.value)
-                  }
-                  placeholder="Label (e.g. Material)"
-                  className={`${inputClass} flex-1 min-w-0`}
-                  required
-                />
-                <InputGroup.Input
-                  value={feature.value}
-                  onChange={e =>
-                    handleFeatureChange(idx, "value", e.target.value)
-                  }
-                  placeholder="Value (e.g. 100% Cotton)"
-                  className={`${inputClass} flex-1 min-w-0`}
-                  required
-                />
-                <Button
-                  type="button"
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => removeFeature(idx)}
-                  disabled={features.length === 1}
-                  className="self-center sm:ml-2 w-full sm:w-auto hover:opacity-80 transition-opacity duration-200"
-                >
-                  <span className="text-sm sm:text-base text-white bg-red-600 px-3 py-1.5 rounded-md shadow-sm hover:shadow transition-all duration-200">
-                    Remove
-                  </span>
-                </Button>
-              </div>
-            ))}
-            <div className="flex justify-center sm:justify-start">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addFeature}
-                className="mt-3 w-full sm:w-auto bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200 hover:border-gray-300 transition-all duration-200"
-                disabled={features.length >= 4}
-              >
-                + Add Feature
-              </Button>
-            </div>
-          </div>
+          
+  
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">

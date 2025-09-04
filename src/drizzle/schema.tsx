@@ -9,8 +9,6 @@ export const products = pgTable("products", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   discount: integer("discount"),
   price: real("price").notNull(),
-  category: varchar("category", { length: 255 }),
   brand: varchar("brand", { length: 255 }),
-  features: jsonb("features").$type<Array<{ label: string; value: string }>>(), // array of objects
   published: boolean("published").default(false).notNull(),
 });

@@ -12,9 +12,7 @@ export async function POST(req: Request) {
     const description = formData.get("description") as string;
     const discount = formData.get("discount") as string;
     const price = formData.get("price") as string;
-    const category = formData.get("category") as string;
     const brand = formData.get("brand") as string;
-    const features = formData.get("features") as string; // Assuming features is a JSON string
     const published = formData.get("published") as string;
 
     if (!name || !price) {
@@ -29,9 +27,8 @@ export async function POST(req: Request) {
       description,
       discount: discount ? parseInt(discount) : null,
       price: parseFloat(price),
-      category,
+      
       brand,
-      features: features ? JSON.parse(features) : null,
       published: published === 'true',
     };
 

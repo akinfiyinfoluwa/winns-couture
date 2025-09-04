@@ -214,9 +214,6 @@ function Page(props: Props) {
                     Title
                   </th>
                   <th className="text-left px-6 py-4 font-medium text-gray-500">
-                    Category
-                  </th>
-                  <th className="text-left px-6 py-4 font-medium text-gray-500">
                     Status
                   </th>
                   <th className="text-left px-6 py-4 font-medium text-gray-500">
@@ -241,7 +238,6 @@ function Page(props: Props) {
                       />
                     </td>
                     <td className="px-6 py-4">{post.title}</td>
-                    <td className="px-6 py-4">{post.category}</td>
                     <td className="px-6 py-4">
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
