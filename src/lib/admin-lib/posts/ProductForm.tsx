@@ -122,7 +122,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
     "rounded-md px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white input-class text-sm sm:text-base border border-gray-200 transition-all duration-200 ease-in-out hover:border-primary/30";
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 overflow-y-auto max-h-[calc(100vh-100px)]">
+    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 overflow-y-auto">
       <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -301,25 +301,27 @@ const ProductForm: React.FC<ProductFormProps> = ({
             <option value="false">False</option>
           </select>
         </div>
-        <div className="sticky bottom-0 bg-white shadow-md -mx-4 sm:-mx-6 px-4 sm:px-6 py-4 border-t mt-8">
-          <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 max-w-4xl mx-auto">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={onCancel}
-              className="w-full sm:w-auto order-2 sm:order-1 bg-gray-50 hover:bg-gray-100 text-gray-700"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="w-full sm:w-auto order-1 sm:order-2 shadow-sm hover:shadow transition-shadow duration-200"
-              disabled={loading}
-            >
-              {loading ? "Saving..." : "Save"}
-            </Button>
-          </div>
-        </div>
+        
+       <div className="mx-auto flex max-w-4xl flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:gap-4 sm:pb-20">
+  <Button
+    type="button"
+    variant="secondary"
+    onClick={onCancel}
+    className="w-full sm:w-auto bg-gray-50 text-gray-700 transition-colors hover:bg-gray-100 border border-gray"
+  >
+    Cancel
+  </Button>
+  <Button
+    type="submit"
+    disabled={loading}
+    className="w-full sm:w-auto shadow-sm transition-shadow duration-200 hover:shadow-md"
+  >
+    {loading ? "Saving..." : "Save"}
+  </Button>
+</div>
+      
+      <hr style={{padding:"30px"}} />
+
       </form>
     </div>
   );
