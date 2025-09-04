@@ -18,4 +18,3 @@ const ProductDetailsContent = ({ product }: ProductDetailsContentProps) => {
 };
 
 export default ProductDetailsContent;
-p
