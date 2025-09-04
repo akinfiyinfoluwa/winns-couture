@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetFooter,
   SheetTitle,
-  SheetTrigger,
+  SheetTrigger
 } from "@/components/ui/sheet";
 import React from "react";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,7 @@ function Page(props: Props) {
         date: new Date(post.created_at).toISOString().split("T")[0],
         status: post.published ? "published" : "draft",
         srcUrl: post.image,
-        price: post.price.toString(),
+        price: post.price.toString()
       }));
       setPosts(fetchedPosts);
     } else {
@@ -73,10 +73,10 @@ function Page(props: Props) {
   const handleConfirmDelete = async () => {
     if (postToDelete) {
       const res = await fetch(`/api/posts/delete?id=${postToDelete.id}`, {
-        method: "DELETE",
+        method: "DELETE"
       });
       if (res.ok) {
-        setPosts(posts.filter((p) => p.id !== postToDelete.id));
+        setPosts(posts.filter(p => p.id !== postToDelete.id));
         toast.success(`Post "${postToDelete.title}" deleted successfully!`);
       } else {
         const result = await res.json();
@@ -88,7 +88,7 @@ function Page(props: Props) {
   };
 
   return (
-    <main className="grid gap-4 p-4 md:grid-cols-[220px,_1fr] grid-cols-[1fr]">
+    <main className="grid gap-4 p-4 md:grid-cols-[220px,_1fr] grid-cols-[1fr] bg-gray-50">
       <Sidebar />
       <div>
         <div className="flex items-center justify-between mb-6">
@@ -121,7 +121,7 @@ function Page(props: Props) {
                     setOpen(false);
                     setEditingPost(null);
                   }}
-                  onSave={async (formData) => {
+                  onSave={async formData => {
                     setIsSaving(true);
                     const url = editingPost
                       ? "/api/posts/edit"
@@ -131,7 +131,7 @@ function Page(props: Props) {
                     }
                     const res = await fetch(url, {
                       method: "POST",
-                      body: formData,
+                      body: formData
                     });
                     const result = await res.json();
 
@@ -147,8 +147,8 @@ function Page(props: Props) {
                       const data = result.data[0];
                       if (editingPost) {
                         toast.success("Product updated successfully!");
-                        setPosts((prev) =>
-                          prev.map((p) =>
+                        setPosts(prev =>
+                          prev.map(p =>
                             p.id === editingPost.id
                               ? {
                                   ...p,
@@ -159,14 +159,14 @@ function Page(props: Props) {
                                     ? "published"
                                     : "draft",
                                   srcUrl: data.image,
-                                  price: data.price.toString(),
+                                  price: data.price.toString()
                                 }
-                              : p,
-                          ),
+                              : p
+                          )
                         );
                       } else {
                         toast.success("Product created successfully!");
-                        setPosts((prev) => [
+                        setPosts(prev => [
                           ...prev,
                           {
                             ...data,
@@ -174,8 +174,8 @@ function Page(props: Props) {
                             date: new Date().toISOString().split("T")[0],
                             status: data.published ? "published" : "draft",
                             srcUrl: data.image,
-                            price: data.price.toString(),
-                          },
+                            price: data.price.toString()
+                          }
                         ]);
                       }
                     } else {
@@ -191,7 +191,7 @@ function Page(props: Props) {
                       ? {
                           ...editingPost,
                           name: editingPost.title,
-                          image: editingPost.srcUrl,
+                          image: editingPost.srcUrl
                         }
                       : undefined
                   }
@@ -201,7 +201,8 @@ function Page(props: Props) {
           </Sheet>
         </div>
 
-        <div className="bg-white rounded-lg border">
+        {/* Desktop View */}
+        <div className="hidden md:block bg-white rounded-lg border">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b">
@@ -230,13 +231,13 @@ function Page(props: Props) {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {posts.map((post) => (
+                {posts.map(post => (
                   <tr key={post.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <img
                         src={post.srcUrl || "/images/pic1.png"}
                         alt={post.title}
-                        className="w-12 h-12 object-cover rounded border"
+                        className="w-12 h-12 object-cover rounded-lg border"
                       />
                     </td>
                     <td className="px-6 py-4">{post.title}</td>
@@ -257,7 +258,7 @@ function Page(props: Props) {
                     <td className="px-6 py-4">
                       {new Intl.NumberFormat("en-NG", {
                         style: "currency",
-                        currency: "NGN",
+                        currency: "NGN"
                       }).format(parseInt(post.price, 10))}
                     </td>
                     <td className="px-6 py-4 text-right space-x-2">
@@ -286,6 +287,69 @@ function Page(props: Props) {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Mobile View */}
+        <div className="md:hidden grid grid-cols-2 sm:grid-cols-2 gap-4">
+          {posts.map(post => (
+            <div
+              key={post.id}
+              className="bg-white rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
+            >
+              <div className="relative aspect-square">
+                <img
+                  src={post.srcUrl || "/images/pic1.png"}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                />
+                <span
+                  className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium
+                    ${
+                      post.status === "published"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                >
+                  {post.status}
+                </span>
+              </div>
+              <div className="p-3">
+                <h3 className="font-medium text-sm truncate">{post.title}</h3>
+                <div className="mt-1 text-xs text-gray-500">
+                  {post.category}
+                </div>
+                <div className="mt-2 flex items-center justify-between">
+                  <span className="text-sm font-semibold">
+                    {new Intl.NumberFormat("en-NG", {
+                      style: "currency",
+                      currency: "NGN"
+                    }).format(parseInt(post.price, 10))}
+                  </span>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={() => {
+                        setEditingPost(post);
+                        setOpen(true);
+                      }}
+                    >
+                      <FiEdit2 className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0 text-red-600"
+                      onClick={() => handleDeleteClick(post)}
+                    >
+                      <FiTrash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
       <ConfirmModal
