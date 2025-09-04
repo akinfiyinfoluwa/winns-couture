@@ -23,6 +23,26 @@ const colorsData: Color[] = [
     name: "Blue",
     code: "bg-[#31344F]",
   },
+  {
+    name: "Red",
+    code: "bg-[#FF0000]",
+  },
+  {
+    name: "Yellow",
+    code: "bg-[#FFFF00]",
+  },
+  {
+    name: "Purple",
+    code: "bg-[#800080]",
+  },
+  {
+    name: "Orange",
+    code: "bg-[#FFA500]",
+  },
+  {
+    name: "Pink",
+    code: "bg-[#FFC0CB]",
+  },
 ];
 
 const ColorSelection = () => {
