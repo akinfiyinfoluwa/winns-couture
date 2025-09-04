@@ -86,3 +86,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.input-class {
+  border: 1px solid rgb(172, 166, 166);
+}
