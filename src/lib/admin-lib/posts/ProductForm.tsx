@@ -26,7 +26,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
     price: initialData?.price || "",
     discount: initialData?.discount || "",
     brand: initialData?.brand || "The Winifred Akin RTW",
-    published: initialData?.published?.toString() || "true"
+    published: initialData?.published?.toString() || "true",
+    slug: initialData?.slug || ""
   });
 
 
@@ -38,7 +39,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
         price: initialData.price || "",
         discount: initialData.discount || "",
         brand: initialData.brand || "The Winifred Akin RTW",
-        published: initialData.published?.toString() || "false"
+        published: initialData.published?.toString() || "false",
+        slug: initialData.slug || ""
       });
       setImagePreview(initialData.image || null);
     } else {
@@ -48,7 +50,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
         price: "",
         discount: "",
         brand: "The Winifred Akin RTW",
-        published: "true"
+        published: "true",
+        slug: ""
       });
       setImagePreview(null);
     }
@@ -86,11 +89,18 @@ const ProductForm: React.FC<ProductFormProps> = ({
     if (file) {
       formData.append("file", file);
     }
+
+    let slug = product.slug;
+    if (!slug) {
+      slug = product.name.toLowerCase().replace(/\s+/g, "-");
+    }
+
     Object.entries(product).forEach(([key, value]) => {
       if (key !== "features") {
         formData.append(key, value);
       }
     });
+    formData.set("slug", slug);
     onSave(formData);
   };
 
@@ -111,6 +121,18 @@ const ProductForm: React.FC<ProductFormProps> = ({
             onChange={handleInputChange}
             className={inputClass}
             required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Slug
+          </label>
+          <InputGroup.Input
+            type="text"
+            name="slug"
+            value={product.slug}
+            onChange={handleInputChange}
+            className={inputClass}
           />
         </div>
         <div>

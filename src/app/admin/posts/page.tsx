@@ -30,6 +30,7 @@ interface Post {
   features: Array<{ label: string; value: string }>;
   name: string;
   image: string;
+  slug: string;
 }
 
 interface Props {}
@@ -159,7 +160,8 @@ function Page(props: Props) {
                                     ? "published"
                                     : "draft",
                                   srcUrl: data.image,
-                                  price: data.price.toString()
+                                  price: data.price.toString(),
+                                  slug: data.slug
                                 }
                               : p
                           )
@@ -174,7 +176,8 @@ function Page(props: Props) {
                             date: new Date().toISOString().split("T")[0],
                             status: data.published ? "published" : "draft",
                             srcUrl: data.image,
-                            price: data.price.toString()
+                            price: data.price.toString(),
+                            slug: data.slug
                           }
                         ]);
                       }
@@ -191,7 +194,8 @@ function Page(props: Props) {
                       ? {
                           ...editingPost,
                           name: editingPost.title,
-                          image: editingPost.srcUrl
+                          image: editingPost.srcUrl,
+                          slug: editingPost.slug
                         }
                       : undefined
                   }

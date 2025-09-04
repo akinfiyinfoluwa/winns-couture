@@ -15,6 +15,7 @@ export async function POST(req: Request) {
     const price = formData.get("price") as string;
     const brand = formData.get("brand") as string;
     const published = formData.get("published") as string;
+    const slug = formData.get("slug") as string;
 
     if (!id) {
       return NextResponse.json(
@@ -37,6 +38,7 @@ export async function POST(req: Request) {
       price: parseFloat(price),
       brand,
       published: published === 'true',
+      slug,
     };
 
     if (file) {

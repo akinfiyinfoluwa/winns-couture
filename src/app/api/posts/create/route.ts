@@ -14,6 +14,7 @@ export async function POST(req: Request) {
     const price = formData.get("price") as string;
     const brand = formData.get("brand") as string;
     const published = formData.get("published") as string;
+    const slug = formData.get("slug") as string;
 
     if (!name || !price) {
       return NextResponse.json(
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
       description,
       discount: discount ? parseInt(discount) : null,
       price: parseFloat(price),
-      
+      slug,
       brand,
       published: published === 'true',
     };
