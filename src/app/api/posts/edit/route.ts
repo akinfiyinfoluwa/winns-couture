@@ -44,6 +44,30 @@ export async function POST(req: Request) {
     };
 
     if (file) {
+      // First, fetch the product to get the old image URL
+      const { data: product, error: fetchError } = await supabase
+        .from("products")
+        .select("image")
+        .eq("id", id)
+        .single();
+
+      if (fetchError) {
+        console.error("Error fetching product for image deletion:", fetchError);
+      } else if (product && product.image) {
+        const oldImageUrl = product.image;
+        const oldFileName = oldImageUrl.split("/").pop();
+
+        if (oldFileName) {
+          const { error: deleteImageError } = await supabase.storage
+            .from("images")
+            .remove([oldFileName]);
+
+          if (deleteImageError) {
+            console.error("Error deleting old image:", deleteImageError);
+          }
+        }
+      }
+
       const fileBuffer = Buffer.from(await file.arrayBuffer());
       const fileName = `${Date.now()}-${file.name}`;
 
