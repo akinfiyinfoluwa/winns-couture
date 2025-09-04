@@ -6,11 +6,13 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
     const res = await fetch("/api/auth/login", {
       method: "POST",
@@ -23,6 +25,7 @@ export default function LoginPage() {
     } else {
       setError("Invalid username or password");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -75,8 +78,9 @@ export default function LoginPage() {
             <button
               type="submit"
               className="w-full px-4 py-2 font-semibold text-white bg-purple-500 rounded-lg shadow-sm hover:bg-purple-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-1 transition-all duration-200"
+              disabled={isLoading}
             >
-              Sign In
+              {isLoading ? "Signing In..." : "Sign In"}
             </button>
           </div>
         </form>
