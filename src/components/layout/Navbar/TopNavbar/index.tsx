@@ -6,7 +6,7 @@ import { NavMenu } from "../navbar.types";
 import { MenuList } from "./MenuList";
 import {
   NavigationMenu,
-  NavigationMenuList,
+  NavigationMenuList
 } from "@/components/ui/navigation-menu";
 import { MenuItem } from "./MenuItem";
 import Image from "next/image";
@@ -20,7 +20,7 @@ const data: NavMenu = [
     label: "Shop",
     type: "MenuItem",
     children: [],
-    url: "/",
+    url: "/"
   },
 
   //Deals” and use this section to showcase bundled offers (e.g., 5 complementary items at a discounted rate).
@@ -30,30 +30,33 @@ const data: NavMenu = [
     type: "MenuList",
     label: "Deals",
     url: "/",
-    children: [{
-      id: 21,
-      label: "5 for 4",
-      url: "/",
-      description: "Get 5 items for the price of 4",
-    },
-    {
-      id: 22,
-      label: "Buy 2 Get 1 Free",
-      url: "/",
-      description: "Buy any 2 items and get the 3rd one free",
-    },
-    {id: 23,
-      label: "Seasonal Discounts",
-      url: "/",
-      description: "Check out our seasonal discounts on selected items",
-    }],
+    children: [
+      {
+        id: 21,
+        label: "5 for 4",
+        url: "/",
+        description: "Get 5 items for the price of 4"
+      },
+      {
+        id: 22,
+        label: "Buy 2 Get 1 Free",
+        url: "/",
+        description: "Buy any 2 items and get the 3rd one free"
+      },
+      {
+        id: 23,
+        label: "Seasonal Discounts",
+        url: "/",
+        description: "Check out our seasonal discounts on selected items"
+      }
+    ]
   },
   {
     id: 3,
     type: "MenuItem",
     label: "New Arrivals",
     url: "/",
-    children: [],
+    children: []
   },
   {
     id: 4,
@@ -64,22 +67,22 @@ const data: NavMenu = [
         id: 41,
         label: "My style Express",
         url: "/",
-        description: "Explore My style Express collection",
+        description: "Explore My style Express collection"
       },
       {
         id: 42,
         label: "The Winifred Akin RTW",
         url: "/",
-        description: "Discover The Winifred Akin RTW designs",
+        description: "Discover The Winifred Akin RTW designs"
       },
       {
         id: 43,
         label: "New arrivals",
         url: "/",
-        description: "Latest brand arrivals",
-      },
-    ],
-  },
+        description: "Latest brand arrivals"
+      }
+    ]
+  }
 ];
 
 const TopNavbar = () => {
@@ -94,15 +97,15 @@ const TopNavbar = () => {
             href="/"
             className={cn([
               ,
-              "text-2xl lg:text-[32px] mb-2 mr-3 lg:mr-10 text-yellow-600",
+              "text-2xl lg:text-[32px] mb-2 mr-3 lg:mr-10 text-yellow-600"
             ])}
           >
-           WINN'S COUTURE
+            WINN&apos;S COUTURE
           </Link>
         </div>
         <NavigationMenu className="hidden md:flex mr-2 lg:mr-7">
           <NavigationMenuList>
-            {data.map((item) => (
+            {data.map(item => (
               <React.Fragment key={item.id}>
                 {item.type === "MenuItem" && (
                   <MenuItem label={item.label} url={item.url} />

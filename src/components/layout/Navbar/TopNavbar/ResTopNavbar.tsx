@@ -5,7 +5,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
+  SheetTrigger
 } from "@/components/ui/sheet";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +16,7 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
+  AccordionTrigger
 } from "@/components/ui/accordion";
 
 const ResTopNavbar = ({ data }: { data: NavMenu }) => {
@@ -37,13 +37,13 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
           <SheetTitle asChild>
             <SheetClose asChild>
               <Link href="/" className={cn([, "text-2xl"])}>
-               WINN'S COUTURE
+                WINN&apos;S COUTURE
               </Link>
             </SheetClose>
           </SheetTitle>
         </SheetHeader>
         <div className="flex flex-col items-start">
-          {data.map((item) => (
+          {data.map(item => (
             <React.Fragment key={item.id}>
               {item.type === "MenuItem" && (
                 <SheetClose asChild>
