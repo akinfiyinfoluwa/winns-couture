@@ -129,24 +129,39 @@ export const RecentTransactions = () => {
           See all
         </button>
       </div>
-      <table className="w-full table-auto">
-        <TableHead />
+      <div className="hidden md:block">
+        <table className="w-full table-auto">
+          <TableHead />
+          <tbody>
+            {transactionsData.slice(0, 6).map((transaction) => (
+              <TableRow
+                key={transaction.order}
+                orderId={transaction.orderId}
+                unitsBought={transaction.unitsBought}
+                date={transaction.date}
+                price={transaction.price}
+                order={transaction.order}
+                customerAddress={transaction.customerAddress}
+                customerEmail={transaction.customerEmail}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-        <tbody>
-          {transactionsData.slice(0, 6).map((transaction) => (
-            <TableRow
-              key={transaction.order}
-              orderId={transaction.orderId}
-              unitsBought={transaction.unitsBought}
-              date={transaction.date}
-              price={transaction.price}
-              order={transaction.order}
-              customerAddress={transaction.customerAddress}
-              customerEmail={transaction.customerEmail}
-            />
-          ))}
-        </tbody>
-      </table>
+      <div className="md:hidden">
+        {transactionsData.slice(0, 6).map((transaction) => (
+          <MobileTransactionCard
+            key={transaction.order}
+            orderId={transaction.orderId}
+            unitsBought={transaction.unitsBought}
+            date={transaction.date}
+            price={transaction.price}
+            customerAddress={transaction.customerAddress}
+            customerEmail={transaction.customerEmail}
+          />
+        ))}
+      </div>
 
       <AllTransactionsModal
         open={showAllTransactions}
@@ -211,5 +226,51 @@ export const TableRow = ({
         </button>
       </td>
     </tr>
+  );
+};
+
+interface MobileTransactionCardProps {
+  orderId: string;
+  unitsBought: number;
+  date: string;
+  price: string;
+  customerAddress: string;
+  customerEmail: string;
+}
+
+export const MobileTransactionCard: React.FC<MobileTransactionCardProps> = ({
+  orderId,
+  unitsBought,
+  date,
+  price,
+  customerAddress,
+  customerEmail,
+}) => {
+  return (
+    <div className="mb-4 p-4 border border-stone-300 rounded-md shadow-sm">
+      <div className="flex justify-between items-center mb-2">
+        <h4 className="font-semibold text-lg">
+          Order ID: <a href="#" className="text-violet-600 underline flex items-center gap-1 inline-flex">{orderId} <FiArrowUpRight /></a>
+        </h4>
+        <span className="text-sm text-gray-600">{date}</span>
+      </div>
+      <div className="text-sm mb-1">
+        <span className="font-medium">Units Bought:</span> {unitsBought}
+      </div>
+      <div className="text-sm mb-1">
+        <span className="font-medium">Price:</span> {price}
+      </div>
+      <div className="text-sm mb-1">
+        <span className="font-medium">Address:</span> {customerAddress}
+      </div>
+      <div className="text-sm">
+        <span className="font-medium">Email:</span> {customerEmail}
+      </div>
+      <div className="mt-3 text-right">
+        <button className="hover:bg-stone-200 transition-colors grid place-content-center rounded text-sm size-8 ml-auto">
+          <FiMoreHorizontal />
+        </button>
+      </div>
+    </div>
   );
 };
