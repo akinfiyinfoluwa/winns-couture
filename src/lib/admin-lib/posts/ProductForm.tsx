@@ -19,7 +19,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
     price: initialData?.price || "",
     discount: initialData?.discount || "",
     category: initialData?.category || "",
-    brand: initialData?.brand || "",
+    brand: initialData?.brand || "The Winifred Akin RTW",
     published: initialData?.published?.toString() || "true",
   });
 
@@ -33,7 +33,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
         price: initialData.price || "",
         discount: initialData.discount || "",
         category: initialData.category || "",
-        brand: initialData.brand || "",
+        brand: initialData.brand || "The Winifred Akin RTW",
         published: initialData.published?.toString() || "false",
       });
       setFeatures(initialData.features || [{ label: "", value: "" }])
@@ -45,7 +45,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
         price: "",
         discount: "",
         category: "",
-        brand: "",
+        brand: "The Winifred Akin RTW",
         published: "true",
       });
       setFeatures([{ label: "", value: "" }])
@@ -78,6 +78,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!file && !initialData?.image) {
+      alert("Please upload an image.");
+      return;
+    }
     const formData = new FormData();
     if (file) {
       formData.append("file", file);
@@ -102,12 +106,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
         </div>
         <div>
           <label className="block text-sm font-medium mb-1 sm:mb-2">Description</label>
-          <textarea name="description" value={product.description} onChange={handleInputChange} className={`${inputClass} p-3 sm:p-5`} />
+          <textarea name="description" value={product.description} onChange={handleInputChange} className={`${inputClass} p-3 sm:p-5`} required />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-medium mb-1 sm:mb-2">Price</label>
-            <InputGroup.Input type="text" name="price" value={product.price} onChange={handleInputChange} className={inputClass} required />
+            <InputGroup.Input type="number" name="price" value={product.price} onChange={handleInputChange} className={inputClass} required />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1 sm:mb-2">Discount (%)</label>
@@ -116,7 +120,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
         </div>
         <div>
           <label className="block text-sm font-medium mb-1 sm:mb-2">Image</label>
-          <InputGroup.Input type="file" accept="image/*" onChange={handleFileChange} className={inputClass} />
+          <InputGroup.Input type="file" accept="image/*" onChange={handleFileChange} className={inputClass}  required/>
           {imagePreview && (
             <div className="mt-2 flex justify-center sm:justify-start">
               <img src={imagePreview} alt="Preview" className="rounded w-24 h-24 sm:w-32 sm:h-32 object-cover border" />
@@ -126,11 +130,14 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-medium mb-1 sm:mb-2">Category</label>
-            <InputGroup.Input type="text" name="category" value={product.category} onChange={handleInputChange} className={inputClass} />
+            <InputGroup.Input type="text" name="category" value={product.category} onChange={handleInputChange} className={inputClass} placeholder='Causual' required />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1 sm:mb-2">Brand</label>
-            <InputGroup.Input type="text" name="brand" value={product.brand} onChange={handleInputChange} className={inputClass} />
+            <select name="brand" value={product.brand} onChange={handleInputChange} className={inputClass}>
+              <option value="The Winifred Akin RTW">The Winifred Akin RTW</option>
+              <option value="My style Express">My style Express</option>
+            </select>
           </div>
         </div>
         <div>
@@ -146,12 +153,14 @@ const ProductForm: React.FC<ProductFormProps> = ({ onCancel, onSave, initialData
                   onChange={e => handleFeatureChange(idx, 'label', e.target.value)}
                   placeholder="Label (e.g. Material)"
                   className={`${inputClass} flex-1 min-w-0`}
+                  required
                 />
                 <InputGroup.Input
                   value={feature.value}
                   onChange={e => handleFeatureChange(idx, 'value', e.target.value)}
                   placeholder="Value (e.g. 100% Cotton)"
                   className={`${inputClass} flex-1 min-w-0`}
+                  required
                 />
                 <Button
                   type="button"
