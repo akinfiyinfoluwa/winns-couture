@@ -1,8 +1,10 @@
 // app/api/posts/edit/route.ts
 import { NextResponse } from "next/server";
-import client from "../../../../../utils/supabase/client";
-
-const supabase = client;
+import { db } from "@/drizzle";
+import { products } from "@/drizzle/schema";
+import { eq } from "drizzle-orm";
+import { v2 as cloudinary } from 'cloudinary';
+import '../../../../../utils/cloudinary/client';
 
 export async function POST(req: Request) {
   try {
@@ -31,6 +33,12 @@ export async function POST(req: Request) {
       );
     }
 
+    const product = await db.select().from(products).where(eq(products.id, parseInt(id)));
+
+    if (product.length === 0) {
+        return NextResponse.json({ error: "Product not found." }, { status: 404 });
+    }
+
     const productData: any = {
       name,
       description,
@@ -39,62 +47,33 @@ export async function POST(req: Request) {
       brand,
       published: published === 'true',
       slug,
+      updatedAt: new Date(),
     };
 
     if (file) {
-      // First, fetch the product to get the old image URL
-      const { data: product, error: fetchError } = await supabase
-        .from("products")
-        .select("image")
-        .eq("id", id)
-        .single();
-
-      if (fetchError) {
-        console.error("Error fetching product for image deletion:", fetchError);
-      } else if (product && product.image) {
-        const oldImageUrl = product.image;
-        const oldFileName = oldImageUrl.split("/").pop();
-
-        if (oldFileName) {
-          const { error: deleteImageError } = await supabase.storage
-            .from("images")
-            .remove([oldFileName]);
-
-          if (deleteImageError) {
-            console.error("Error deleting old image:", deleteImageError);
-          }
-        }
+      if (product[0].public_id) {
+        await cloudinary.uploader.destroy(product[0].public_id);
       }
 
       const fileBuffer = Buffer.from(await file.arrayBuffer());
-      const fileName = `${Date.now()}-${file.name}`;
-
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("images")
-        .upload(fileName, fileBuffer, {
-          contentType: file.type,
-        });
-
-      if (uploadError) {
-        throw uploadError;
-      }
-      
-      const { data: publicUrlData } = supabase.storage
-        .from("images")
-        .getPublicUrl(fileName);
-
-      productData.image = publicUrlData.publicUrl;
+      const result: any = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { folder: "next-ecommerce" },
+            (error, result) => {
+                if (result) {
+                    resolve(result);
+                } else {
+                    reject(error);
+                }
+            }
+        );
+        stream.end(fileBuffer);
+      });
+      productData.image_url = result.secure_url;
+      productData.public_id = result.public_id;
     }
 
-    const { data, error } = await supabase
-      .from("products")
-      .update(productData)
-      .eq("id", id)
-      .select();
-
-    if (error) {
-      throw error;
-    }
+    const data = await db.update(products).set(productData).where(eq(products.id, parseInt(id))).returning();
 
     return NextResponse.json({ data });
   } catch (error: any) {

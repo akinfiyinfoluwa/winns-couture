@@ -1,8 +1,9 @@
 // app/api/posts/create/route.ts
 import { NextResponse } from "next/server";
-import client from "../../../../../utils/supabase/client";
-
-const supabase = client;
+import { db } from "@/drizzle";
+import { products } from "@/drizzle/schema";
+import { v2 as cloudinary } from 'cloudinary';
+import '../../../../../utils/cloudinary/client';
 
 export async function POST(req: Request) {
   try {
@@ -23,45 +24,41 @@ export async function POST(req: Request) {
       );
     }
 
-    const productData: any = {
+    let imageUrl: string | undefined;
+    let publicId: string | undefined;
+
+    if (file) {
+      const fileBuffer = Buffer.from(await file.arrayBuffer());
+      const result: any = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { folder: "next-ecommerce" },
+            (error, result) => {
+                if (result) {
+                    resolve(result);
+                } else {
+                    reject(error);
+                }
+            }
+        );
+        stream.end(fileBuffer);
+      });
+      imageUrl = result.secure_url;
+      publicId = result.public_id;
+    }
+
+    const productData:any = {
       name,
       description,
-      discount: discount ? parseInt(discount) : null,
+      discount: discount ? parseInt(discount) : undefined,
       price: parseFloat(price),
       slug,
       brand,
       published: published === 'true',
+      image_url: imageUrl,
+      public_id: publicId,
     };
 
-    if (file) {
-      const fileBuffer = Buffer.from(await file.arrayBuffer());
-      const fileName = `${Date.now()}-${file.name}`;
-
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("images")
-        .upload(fileName, fileBuffer, {
-          contentType: file.type,
-        });
-
-      if (uploadError) {
-        throw uploadError;
-      }
-      
-      const { data: publicUrlData } = supabase.storage
-        .from("images")
-        .getPublicUrl(fileName);
-
-      productData.image = publicUrlData.publicUrl;
-    }
-
-    const { data, error } = await supabase
-      .from("products")
-      .insert([productData])
-      .select();
-
-    if (error) {
-      throw error;
-    }
+    const data = await db.insert(products).values(productData).returning();
 
     return NextResponse.json({ data });
   } catch (error: any) {

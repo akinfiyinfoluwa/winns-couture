@@ -11,6 +11,7 @@ const jost = Jost({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Winn's Couture",
   description: "An e-commerce app for a fashion brand.",
+  
 };
 
 export const viewport: Viewport = {

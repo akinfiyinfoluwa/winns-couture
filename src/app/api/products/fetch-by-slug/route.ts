@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import client from "../../../../../utils/supabase/client";
-
-const supabase = client;
+import { db } from "@/drizzle";
+import { products } from "@/drizzle/schema";
+import { eq } from "drizzle-orm";
 
 export async function GET(req: Request) {
   try {
@@ -9,23 +9,17 @@ export async function GET(req: Request) {
     const slug = searchParams.get("slug");
 
     if (!slug) {
-      return NextResponse.json({ error: "Slug is required." }, { status: 400 });
+      const data = await db.select().from(products);
+      return NextResponse.json({ data });
     }
 
-    const { data, error } = await supabase
-      .from("products")
-      .select("*")
-      .eq("slug", slug)
-      .single();
+    const data = await db.select().from(products).where(eq(products.slug, slug));
 
-    if (error) {
-      if (error.code === "PGRST116") { // No rows found
-        return NextResponse.json({ error: "Product not found." }, { status: 404 });
-      }
-      throw error;
+    if (data.length === 0) {
+      return NextResponse.json({ error: "Product not found." }, { status: 404 });
     }
 
-    return NextResponse.json({ data });
+    return NextResponse.json({ data: data[0] });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ error: error.message }, { status: 500 });

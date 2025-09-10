@@ -3,7 +3,8 @@ import { pgTable, serial, varchar, text, timestamp, boolean, integer, real, json
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
-  image: text("image"), // optional
+  image_url: text("image_url"), // optional
+  public_id: text("public_id"), // optional
   description: text("description"), // optional
   slug: text("slug"), // optional
   createdAt: timestamp("created_at").defaultNow().notNull(),

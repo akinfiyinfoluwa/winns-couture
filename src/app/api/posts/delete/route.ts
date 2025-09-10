@@ -1,8 +1,10 @@
 // app/api/posts/delete/route.ts
 import { NextResponse } from "next/server";
-import client from "../../../../../utils/supabase/client";
-
-const supabase = client;
+import { db } from "@/drizzle";
+import { products } from "@/drizzle/schema";
+import { eq } from "drizzle-orm";
+import { v2 as cloudinary } from 'cloudinary';
+import '../../../../../utils/cloudinary/client';
 
 export async function DELETE(req: Request) {
   try {
@@ -13,41 +15,17 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Product ID is required." }, { status: 400 });
     }
 
-    // First, fetch the product to get the image URL
-    const { data: productData, error: fetchError } = await supabase
-      .from("products")
-      .select("image")
-      .eq("id", id)
-      .single();
+    const product = await db.select().from(products).where(eq(products.id, parseInt(id)));
 
-    if (fetchError) {
-      throw fetchError;
+    if (product.length === 0) {
+        return NextResponse.json({ error: "Product not found." }, { status: 404 });
     }
 
-    if (productData && productData.image) {
-      const imageUrl = productData.image;
-      const fileName = imageUrl.split("/").pop();
-
-      if (fileName) {
-        const { error: deleteImageError } = await supabase.storage
-          .from("images")
-          .remove([fileName]);
-
-        if (deleteImageError) {
-          console.error("Error deleting image:", deleteImageError);
-          // You might want to decide if you want to proceed with deleting the product record even if image deletion fails
-        }
-      }
+    if (product[0].public_id) {
+        await cloudinary.uploader.destroy(product[0].public_id);
     }
 
-    const { data, error } = await supabase
-      .from("products")
-      .delete()
-      .eq("id", id);
-
-    if (error) {
-      throw error;
-    }
+    const data = await db.delete(products).where(eq(products.id, parseInt(id))).returning();
 
     return NextResponse.json({ data });
   } catch (error: any) {

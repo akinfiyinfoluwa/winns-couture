@@ -1,17 +1,11 @@
-
 // app/api/posts/fetch/route.ts
 import { NextResponse } from "next/server";
-import client from "../../../../../utils/supabase/client";
-
-const supabase = client;
+import { db } from "@/drizzle";
+import { products } from "@/drizzle/schema";
 
 export async function GET() {
   try {
-    const { data, error } = await supabase.from("products").select("*");
-
-    if (error) {
-      throw error;
-    }
+    const data = await db.select().from(products);
 
     return NextResponse.json({ data });
   } catch (error: any) {

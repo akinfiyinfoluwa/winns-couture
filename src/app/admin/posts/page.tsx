@@ -50,20 +50,30 @@ function Page(props: Props) {
   }, []);
 
   const fetchPosts = async () => {
-    const res = await fetch("/api/posts/fetch");
-    const result = await res.json();
-    if (res.ok) {
-      const fetchedPosts = result.data.map((post: any) => ({
-        ...post,
-        title: post.name,
-        date: new Date(post.created_at).toISOString().split("T")[0],
-        status: post.published ? "published" : "draft",
-        srcUrl: post.image,
-        price: post.price.toString()
-      }));
-      setPosts(fetchedPosts);
-    } else {
-      toast.error(result.error || "Something went wrong!");
+    try {
+      console.log("Fetching posts...");
+      const res = await fetch("/api/products/fetch-by-slug");
+      console.log("Fetch response status:", res.status);
+      const text = await res.text();
+      console.log("Fetch response text:", text);
+      const result = JSON.parse(text);
+      console.log("Fetched data:", result);
+      if (res.ok) {
+        const fetchedPosts = result.data.map((post: any) => ({
+          ...post,
+          title: post.name,
+          date: new Date(post.createdAt).toISOString().split("T")[0],
+          status: post.published ? "published" : "draft",
+          srcUrl: post.image_url,
+          price: post.price ? post.price.toString() : "0"
+        }));
+        setPosts(fetchedPosts);
+      } else {
+        toast.error(result.error || "Something went wrong!");
+      }
+    } catch (error) {
+      console.error("Error in fetchPosts:", error);
+      toast.error("An unexpected error occurred while fetching posts.");
     }
   };
 
@@ -162,7 +172,7 @@ function Page(props: Props) {
                                   status: data.published
                                     ? "published"
                                     : "draft",
-                                  srcUrl: data.image,
+                                  srcUrl: data.image_url,
                                   price: data.price.toString(),
                                   slug: data.slug
                                 }
@@ -178,7 +188,7 @@ function Page(props: Props) {
                             title: data.name,
                             date: new Date().toISOString().split("T")[0],
                             status: data.published ? "published" : "draft",
-                            srcUrl: data.image,
+                            srcUrl: data.image_url,
                             price: data.price.toString(),
                             slug: data.slug
                           }
