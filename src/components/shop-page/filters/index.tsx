@@ -26,7 +26,7 @@ const Filters: React.FC<FiltersProps> = ({ onChange }) => {
       <hr className="border-t-black/10" />
       <CategoriesSection onChange={handleFilterChange} />
       <hr className="border-t-black/10" />
-      <PriceSection onChange={handleFilterChange} />
+      {/* <PriceSection onChange={handleFilterChange} /> */}
       <hr className="border-t-black/10" />
       <ColorsSection onChange={handleFilterChange} />
       <hr className="border-t-black/10" />

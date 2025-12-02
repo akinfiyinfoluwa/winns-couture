@@ -10,7 +10,6 @@ import {
 import MobileFilters from "@/components/shop-page/filters/MobileFilters";
 import Filters from "@/components/shop-page/filters";
 import { FiSliders } from "react-icons/fi";
-import { allProducts } from "./data";
 import ProductCard from "@/components/common/ProductCard";
 import {
   Pagination,
@@ -21,10 +20,11 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Product } from "@/types/product.types";
 import Reviews from "@/components/homepage/Reviews";
 import { reviewsData } from "./data";
+import { toast } from "react-toastify";
 
 interface FiltersState {
   categories: string[];
@@ -35,22 +35,64 @@ interface FiltersState {
 }
 
 export default function HomePage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<FiltersState>({
     categories: [],
     sizes: [],
     colors: [],
     dressStyles: [],
-    priceRange: [0, 1000],
+    priceRange: [0, 1000000],
   });
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9; // You can adjust this number
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      console.log("Fetching posts...");
+      const res = await fetch("/api/products/fetch-by-slug");
+      console.log("Fetch response status:", res.status);
+      const text = await res.text();
+      console.log("Fetch response text:", text);
+      const result = JSON.parse(text);
+      console.log("Fetched data:", result);
+      if (res.ok) {
+        const fetchedPosts: Product[] = result.data.map((post: any) => ({
+          id: post.id,
+          title: post.name,
+          srcUrl: post.image_url || "/images/pic1.png",
+          price: typeof post.price === 'number' ? post.price : parseFloat(post.price) || 0,
+          discount: post.discount || 0,
+          rating: 4.5, // Default rating
+          category: "General", // Default category
+          sizes: ["Small", "Medium", "Large"], // Default sizes
+          colors: ["bg-black"], // Default colors
+          dressStyle: "Casual", // Default style
+          brand: post.brand || "mystyle-express",
+        }));
+        setProducts(fetchedPosts);
+      } else {
+        toast.error(result.error || "Something went wrong!");
+      }
+    } catch (error) {
+      console.error("Error in fetchPosts:", error);
+      toast.error("An unexpected error occurred while fetching posts.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const handleFilterChange = (callback: (prev: FiltersState) => FiltersState) => {
     setFilters(callback);
     setCurrentPage(1); // Reset to first page on filter change
   };
 
-  const filteredProducts = allProducts.filter((product: Product) => {
+  const filteredProducts = products.filter((product: Product) => {
     const { categories, sizes, colors, dressStyles, priceRange } = filters;
     if (categories.length > 0 && !categories.includes(product.category)) {
       return false;
@@ -129,9 +171,18 @@ export default function HomePage() {
               </div>
             </div>
             <div className="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
-              {currentProducts.map((product: Product) => (
-                <ProductCard key={product.id} data={product} />
-              ))}
+              {loading ? (
+                <div className="col-span-full flex justify-center items-center py-12">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading products...</p>
+                  </div>
+                </div>
+              ) : (
+                currentProducts.map((product: Product) => (
+                  <ProductCard key={product.id} data={product} />
+                ))
+              )}
             </div>
             <hr className="border-t-black/10" />
             <Pagination className="justify-between">
