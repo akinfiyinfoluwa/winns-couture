@@ -14,6 +14,10 @@ import { RootState } from "@/lib/store";
 import { useAppSelector } from "@/lib/hooks/redux";
 import Link from "next/link";
 
+const formatPrice = (price: number) => {
+  return price.toLocaleString('en-NG');
+};
+
 export default function CartPage() {
   const { cart, totalPrice, adjustedTotalPrice } = useAppSelector(
     (state: RootState) => state.carts
@@ -51,7 +55,7 @@ export default function CartPage() {
                 <div className="flex flex-col space-y-5">
                   <div className="flex items-center justify-between">
                     <span className="md:text-xl text-black/60">Subtotal</span>
-                    <span className="md:text-xl font-bold">₦{totalPrice}</span>
+                    <span className="md:text-xl font-bold">₦{formatPrice(Math.round(totalPrice))}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="md:text-xl text-black/60">
@@ -62,7 +66,7 @@ export default function CartPage() {
                       %)
                     </span>
                     <span className="md:text-xl font-bold text-red-600">
-                      -₦{Math.round(totalPrice - adjustedTotalPrice)}
+                      -₦{formatPrice(Math.round(totalPrice - adjustedTotalPrice))}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
@@ -75,7 +79,7 @@ export default function CartPage() {
                   <div className="flex items-center justify-between">
                     <span className="md:text-xl text-black">Total</span>
                     <span className="text-xl md:text-2xl font-bold">
-                      ₦{Math.round(adjustedTotalPrice)}
+                      ₦{formatPrice(Math.round(adjustedTotalPrice))}
                     </span>
                   </div>
                 </div>

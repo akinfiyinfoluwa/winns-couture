@@ -19,6 +19,10 @@ type ProductCardProps = {
   data: CartItem;
 };
 
+const formatPrice = (price: number) => {
+  return price.toLocaleString('en-NG');
+};
+
 const ProductCard = ({ data }: ProductCardProps) => {
   const dispatch = useAppDispatch();
 
@@ -78,22 +82,22 @@ const ProductCard = ({ data }: ProductCardProps) => {
           <div className="flex items-center space-x-[5px] xl:space-x-2.5">
             {data.discount > 0 ? (
               <span className="font-bold text-black text-xl xl:text-2xl">
-                {`₦${Math.round(
+                {`₦${formatPrice(Math.round(
                   data.price - (data.price * data.discount) / 100
-                )}`}
+                ))}`}
               </span>
             ) : data.discount > 0 ? (
               <span className="font-bold text-black text-xl xl:text-2xl">
-                {`₦${data.price - data.discount}`}
+                {`₦${formatPrice(Math.round(data.price - data.discount))}`}
               </span>
             ) : (
               <span className="font-bold text-black text-xl xl:text-2xl">
-                ₦{data.price}
+                ₦{formatPrice(Math.round(data.price))}
               </span>
             )}
             {data.discount > 0 && (
               <span className="font-bold text-black/40 line-through text-xl xl:text-2xl">
-                ₦{data.price}
+                ₦{formatPrice(Math.round(data.price))}
               </span>
             )}
           
