@@ -4,7 +4,7 @@ import BreadcrumbProduct from "@/components/product-page/BreadcrumbProduct";
 import Header from "@/components/product-page/Header";
 import ProductDetails from "@/components/product-page/Tabs";
 import { Product } from "@/types/product.types";
-import { useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 
 interface ProductPageProps {
   params: {
@@ -15,7 +15,6 @@ interface ProductPageProps {
 export default function ProductPage({ params }: ProductPageProps) {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -61,21 +60,21 @@ export default function ProductPage({ params }: ProductPageProps) {
             };
             setProduct(mappedProduct);
           } else {
-            router.push("/not-found");
+            notFound();
           }
         } else {
-          router.push("/not-found");
+          notFound();
         }
       } catch (error) {
         console.error("Error fetching product:", error);
-        router.push("/not-found");
+        notFound();
       } finally {
         setLoading(false);
       }
     };
 
     fetchProduct();
-  }, [params.slug, router]);
+  }, [params.slug]);
 
   if (loading) {
     return (
@@ -93,7 +92,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   }
 
   if (!product) {
-    return null; // Router will redirect to not-found
+    notFound();
   }
 
   return (

@@ -8,6 +8,10 @@ import ColorSelection from "./ColorSelection";
 import SizeSelection from "./SizeSelection";
 import AddToCardSection from "./AddToCardSection";
 
+const formatPrice = (price: number) => {
+  return price.toLocaleString('en-NG');
+};
+
 const Header = ({ data }: { data: Product }) => {
   return (
     <>
@@ -41,22 +45,22 @@ const Header = ({ data }: { data: Product }) => {
           <div className="flex items-center space-x-2.5 sm:space-x-3 mb-5">
             {data.discount > 0 ? (
               <span className="font-bold text-black text-2xl sm:text-[32px]">
-                {`₦${Math.round(
+                {`₦${formatPrice(Math.round(
                   data.price - (data.price * data.discount) / 100
-                )}`}
+                ))}`}
               </span>
             ) : data.discount > 0 ? (
               <span className="font-bold text-black text-2xl sm:text-[32px]">
-                {`₦${data.price - data.discount}`}
+                {`₦${formatPrice(Math.round(data.price - data.discount))}`}
               </span>
             ) : (
               <span className="font-bold text-black text-2xl sm:text-[32px]">
-                ₦{data.price}
+                ₦{formatPrice(Math.round(data.price))}
               </span>
             )}
             {data.discount > 0 && (
               <span className="font-bold text-black/40 line-through text-2xl sm:text-[32px]">
-                ₦{data.price}
+                ₦{formatPrice(Math.round(data.price))}
               </span>
             )}
           
