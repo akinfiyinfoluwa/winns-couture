@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       customer: {
         email: customer.email,
         name: customer.name,
-        phonenumber: customer.phonenumber || "",
+        phonenumber: customer.phonenumber || 00853654765,
       },
       customizations: {
         title: customizations?.title || "Winns Couture Payment",
