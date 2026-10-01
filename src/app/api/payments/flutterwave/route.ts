@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get API key
-    const flutterWaveSecretKey = 'FLWSECK-28ad66fdf2de032ef6b712a783dac60e-190366dfb3cvt-X';
+    const flutterWaveSecretKey = process.env.FLW_SECRET_KEY;
     console.log("Checking API key...", flutterWaveSecretKey ? "Found" : "NOT FOUND");
 
     if (!flutterWaveSecretKey) {
