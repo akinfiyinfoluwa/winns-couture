@@ -1,0 +1,12 @@
+[build]
+  command = "npm run build"
+  functions = ".next/functions"
+  publish = ".next/public"
+
+[functions]
+  nodejs_version = "18"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
